@@ -6,6 +6,7 @@ import android.graphics.*;
 import android.os.SystemClock;
 import android.view.*;
 import java.io.IOException;
+import org.json.*;
 
 /** Native animated sprite scene. No browser, game server, or network dependency. */
 public final class CharacterView extends View {
@@ -40,22 +41,22 @@ public final class CharacterView extends View {
             friends=BitmapFactory.decodeStream(c.getAssets().open("friends.png"));
             extras=BitmapFactory.decodeStream(c.getAssets().open("extras.png"));
             extraActions=BitmapFactory.decodeStream(c.getAssets().open("extra-actions.png"));
-            for(int r=0;r<4;r++)for(int col=0;col<5;col++)frames[r][col]=bounds(friends,col,r,5,4);
-            for(int i=0;i<6;i++)extraFrames[i]=bounds(extras,i%3,i/3,3,2);
-            for(int r=0;r<3;r++)for(int i=0;i<6;i++)extraActionFrames[r][i]=bounds(extraActions,i,r,6,3);
-        } catch(IOException e) { throw new IllegalStateException("De dierenvriendjes ontbreken",e); }
+            // Bounds were analysed during authoring. Never scan millions of pixels on the UI thread.
+            JSONObject metadata;
+            try(java.io.InputStream input=c.getAssets().open("sprite-bounds.json")) {
+                java.io.ByteArrayOutputStream bytes=new java.io.ByteArrayOutputStream();
+                byte[] buffer=new byte[4096];int count;
+                while((count=input.read(buffer))!=-1)bytes.write(buffer,0,count);
+                metadata=new JSONObject(bytes.toString("UTF-8"));
+            }
+            for(int r=0;r<4;r++)for(int col=0;col<5;col++)frames[r][col]=bounds(metadata,"friends.png",r,col);
+            for(int i=0;i<6;i++)extraFrames[i]=bounds(metadata,"extras.png",i/3,i%3);
+            for(int r=0;r<3;r++)for(int i=0;i<6;i++)extraActionFrames[r][i]=bounds(metadata,"extra-actions.png",r,i);
+        } catch(IOException|JSONException e) { throw new IllegalStateException("De dierenvriendjes ontbreken",e); }
     }
-    private static Rect bounds(Bitmap b,int col,int row,int cols,int rows) {
-        int l=col*b.getWidth()/cols, t=row*b.getHeight()/rows;
-        int right=(col+1)*b.getWidth()/cols, bottom=(row+1)*b.getHeight()/rows;
-        int minX=right,minY=bottom,maxX=l,maxY=t;
-        int stride=right-l;
-        int[] pixels=new int[stride*(bottom-t)];
-        b.getPixels(pixels,0,stride,l,t,stride,bottom-t);
-        for(int y=t;y<bottom;y++)for(int x=l;x<right;x++) {
-            if(Color.alpha(pixels[(y-t)*stride+x-l])>110) { minX=Math.min(x,minX); maxX=Math.max(x,maxX); minY=Math.min(y,minY); maxY=Math.max(y,maxY); }
-        }
-        return minX<maxX?new Rect(minX,minY,maxX+1,maxY+1):new Rect(l,t,right,bottom);
+    private static Rect bounds(JSONObject metadata,String atlas,int row,int col) throws JSONException {
+        JSONArray a=metadata.getJSONArray(atlas).getJSONArray(row).getJSONArray(col);
+        return new Rect(a.getInt(0),a.getInt(1),a.getInt(2),a.getInt(3));
     }
     private void sprite(Canvas c, Bitmap b, Rect src, float x,float base,float width,float height,float angle) {
         float s=Math.min(width/src.width(),height/src.height());

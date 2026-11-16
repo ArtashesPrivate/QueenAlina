@@ -43,6 +43,7 @@ Build dependencies: Android Gradle Plugin 8.13.0 and Gradle 8.14.3. No applicati
 - `GameRules.java`: pure economy/progression/care rules.
 - `GameStore.java`: versioned local progress storage.
 - `assets/friends.png`, `assets/extras.png`, `assets/extra-actions.png`: AI-generated game sprite atlases based on the approved designs.
+- `assets/sprite-bounds.json`: precomputed frame rectangles, keeping pixel analysis off the Android UI thread. If atlases change, regenerate with `python tools/analyse-sprites.py` (requires Pillow).
 - `art/approved-animation-sheet.png`: the approved visual reference.
 - `tools/GameRulesTest.java`: regression checks for rewards, purchase bounds, duplicate claims, pet selection, and care limits.
 - `verification/`: build/test evidence and device screenshots when available.
