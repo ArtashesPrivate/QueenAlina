@@ -1,0 +1,62 @@
+name: Android APK
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+      - name: Install Android SDK
+        run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
+      - name: Configure Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Build and check Android app
+        run: |
+          chmod +x gradlew
+          ./gradlew :app:assembleDebug :app:assembleDebugAndroidTest :app:lintDebug --no-daemon
+      - name: Test reward economy and pet care
+        run: |
+          mkdir -p build/rule-tests
+          javac --release 17 -encoding UTF-8 -d build/rule-tests app/src/main/java/nl/alina/tovertuin/GameRules.java tools/GameRulesTest.java
+          java -cp build/rule-tests nl.alina.tovertuin.GameRulesTest
+      - name: Name installable APK
+        run: cp app/build/outputs/apk/debug/app-debug.apk Alinas-Tovertuin-${{ github.ref_name }}.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Alinas-Tovertuin-Android
+          path: |
+            Alinas-Tovertuin-*.apk
+            app/build/reports/lint-results-debug.html
+          retention-days: 30
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: Alinas-Tovertuin-Android
+          path: release
+      - name: Publish Android test release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" release/*.apk --title "Alina’s Tovertuin $GITHUB_REF_NAME" --prerelease --notes 'Native Android testversie. Download de APK op een Android-apparaat. Nederlandse spraak vereist een geïnstalleerde offline Nederlandse stem. Dit is geen Play Store-release.'

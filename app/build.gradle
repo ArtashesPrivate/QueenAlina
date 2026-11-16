@@ -1,0 +1,17 @@
+plugins { id 'com.android.application' }
+// Optional local build directory avoids sync-client file locks in OneDrive workspaces.
+if (project.hasProperty('alinaBuildDir')) layout.buildDirectory = file(project.property('alinaBuildDir'))
+android {
+    namespace 'nl.alina.tovertuin'
+    compileSdk 36
+    defaultConfig {
+        applicationId 'nl.alina.tovertuin'
+        minSdk 26
+        targetSdk 36
+        versionCode 1
+        versionName '0.1.0'
+        testInstrumentationRunner 'nl.alina.tovertuin.SmokeInstrumentation'
+    }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+    buildTypes { release { minifyEnabled false } }
+}

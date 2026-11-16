@@ -1,0 +1,38 @@
+PASS: Native Dutch home launches
+PASS: Starter animals available
+PASS: Math question 1 renders
+PASS: Wrong answer offers retry
+PASS: Math question 2 renders
+PASS: Math question 3 renders
+PASS: Math question 4 renders
+PASS: Math question 5 renders
+PASS: Round completion displays reward
+PASS: Round saves exactly five stars
+PASS: Math question 1 renders
+PASS: Math question 2 renders
+PASS: Math question 3 renders
+PASS: Math question 4 renders
+PASS: Math question 5 renders
+PASS: Round completion displays reward
+PASS: Math question 1 renders
+PASS: Math question 2 renders
+PASS: Math question 3 renders
+PASS: Math question 4 renders
+PASS: Math question 5 renders
+PASS: Round completion displays reward
+PASS: Math question 1 renders
+PASS: Math question 2 renders
+PASS: Math question 3 renders
+PASS: Math question 4 renders
+PASS: Math question 5 renders
+PASS: Round completion displays reward
+PASS: Four real UI rounds earn twenty stars
+PASS: Animal shop opens
+PASS: Purchase requires confirmation
+PASS: Purchase saves animal, exact price and selection
+PASS: Feeding restores the selected pet
+PASS: Sleep restores rest
+PASS: Dutch word game renders
+PASS: Pattern game renders
+PASS: Activity restart restores pet and progress
+PASS: 37 native activity checks. Learning, purchase, care and restart passed.
