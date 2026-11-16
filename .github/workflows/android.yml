@@ -37,7 +37,7 @@ jobs:
           javac --release 17 -encoding UTF-8 -d build/rule-tests app/src/main/java/nl/alina/tovertuin/GameRules.java tools/GameRulesTest.java
           java -cp build/rule-tests nl.alina.tovertuin.GameRulesTest
       - name: Name installable APK
-        run: cp app/build/outputs/apk/debug/app-debug.apk Alinas-Tovertuin-${{ github.ref_name }}.apk
+        run: cp app/build/outputs/apk/debug/app-debug.apk Alinas-Tovertuin-${{ github.run_number }}.apk
       - uses: actions/upload-artifact@v4
         with:
           name: Alinas-Tovertuin-Android
