@@ -1217,10 +1217,14 @@ body.qa-talk .alina .al-mouth { animation: al-talk .2s ease-in-out infinite alte
 
 /* dress-up: all clothes visible at once */
 .items.qa-fit { gap: min(10px, 2vw); padding: 2px; }
-.items.qa-fit .item { padding: 2px; gap: 0; justify-content: center; border-radius: min(22px, calc(var(--cell) * .2)); border-width: 3px; }
-.items.qa-fit .item .ie { font-size: min(clamp(40px, 10vw, 56px), calc(var(--cell) * .42)); }
-.items.qa-fit .item .in { font-size: min(15px, calc(var(--cell) * .14)); line-height: 1.1; }
-.items.qa-fit .item .ip { font-size: min(19px, calc(var(--cell) * .16)); padding: 0 .5em; }
+.items.qa-fit .item { padding: 3px 2px; gap: 1px; justify-content: flex-start; border-radius: min(22px, calc(var(--cell) * .2)); border-width: 3px; }
+.items.qa-fit .item .ie { flex: 1 1 0; min-height: 0; align-self: stretch; position: relative; display: grid; place-items: center; overflow: hidden; line-height: 1; }
+.items.qa-fit .item .ie img.thumb { position: absolute; inset: 0; margin: auto; width: 100%; height: 100%; object-fit: contain; }
+.items.qa-fit .item .in { flex: 0 0 auto; max-width: 100%; min-height: 1.5em; font-size: min(15px, calc(var(--cell) * .15)); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.items.qa-fit .item .ip { flex: none; max-width: 100%; font-size: min(19px, calc(var(--cell) * .17)); padding: 0 .5em; white-space: nowrap; line-height: normal; }
+
+/* a name that does not fit even at the smallest size is left out; the picture and price stay */
+.qa-hide { display: none !important; }
 
 /* coloring pages: every page as a small thumbnail, no scroll list */
 .cp-pages.qa-fit { gap: 6px; padding: 2px; }
@@ -1280,9 +1284,13 @@ body.qa-talk .alina .al-mouth { animation: al-talk .2s ease-in-out infinite alte
 .pk.w span { font-size: min(clamp(12px, 2.2vh, 18px), 3vw); padding: 0 2px; }
 @media (orientation: portrait) { .piano { padding: 10px 6px 12px; gap: 2px; } }
 
-/* menu tiles: the picture stays inside its tile */
-.tile .pic { overflow: hidden; }
+/* menu tiles: name and subtitle get the room they need, the picture fills what is left (fit.js sizes the emoji) */
+.tile { justify-content: center; padding-block: clamp(4px, 1.2vh, 12px); gap: clamp(2px, .6vh, 6px); }
+.tile .pic { flex: 0 1 46cqh; min-height: 0; align-self: stretch; overflow: hidden; }
 .tile .pic img, .tile .pic svg { max-width: 100%; max-height: 100%; object-fit: contain; }
+.tile .name, .tile .age { flex: none; max-width: 100%; overflow-wrap: normal; }
+@container (max-height: 70px) { .tile .age { display: none; } }
+@media (orientation: portrait) and (max-height: 760px) { .view:has(> .menu.many) > .hello-row { display: none; } }
 
 /* answer buttons: big numbers (level 14: 4-5 digits) shrink instead of pushing the row off screen */
 .answers > .ans { min-width: 0; overflow-wrap: anywhere; }
@@ -5931,9 +5939,10 @@ body.qa-talk .alina .al-mouth { animation: al-talk .2s ease-in-out infinite alte
 /* QA:END alina.js */
 
 /* QA:BEGIN leren.js */
-  /* ===== Queen Alina: groep 3 t/m 9 and the subjects children learn at school ===== */
-  const GROEPEN = [3, 4, 5, 6, 7, 8, 9];
-  function groep() { let g = 3; try { g = +localStorage.getItem('speeltuin-groep') || 3; } catch (e) {} return GROEPEN.includes(g) ? g : 3; }
+  /* ===== Queen Alina: groep 3 t/m 8, the subjects of the Dutch kerndoelen (basisonderwijs) per groep ===== */
+  const GROEPEN = [3, 4, 5, 6, 7, 8];
+  /* groep 9 (brugklas) is no longer offered; a child who chose it before lands on groep 8 */
+  function groep() { let g = 3; try { g = +localStorage.getItem('speeltuin-groep') || 3; } catch (e) {} if (g === 9) g = 8; return GROEPEN.includes(g) ? g : 3; }
   const R = (a, b) => a + rnd(b - a + 1), pk = a => a[rnd(a.length)];
   const uniq = a => [...new Set(a)];
   /* fill up to n options around the right answer, without duplicates */
@@ -5992,7 +6001,7 @@ body.qa-talk .alina .al-mouth { animation: al-talk .2s ease-in-out infinite alte
     return { q: `Hoe schrijf je <b>${w}</b>?`, say: `Hoe schrijf je ${w}?`, show: big(shown), ans: k, opts: parts, after: w, hint };
   }
 
-  /* ---- Werkwoorden (groep 6–9) ---- */
+  /* ---- Werkwoorden (groep 6–8) ---- */
   const WW = [['vinden', 'vind'], ['worden', 'word'], ['houden', 'houd'], ['rijden', 'rijd'], ['antwoorden', 'antwoord'], ['zitten', 'zit'], ['praten', 'praat'], ['weten', 'weet'], ['lopen', 'loop'], ['werken', 'werk'], ['spelen', 'speel'], ['fietsen', 'fiets'], ['zwemmen', 'zwem'], ['bakken', 'bak']];
   const wwT = s => s.endsWith('t') ? s : s + 't';
   const wwWrong = s => s.endsWith('d') ? s.slice(0, -1) + 't' : s.endsWith('t') ? s + 't' : s + 'd';
@@ -6001,7 +6010,7 @@ body.qa-talk .alina .al-mouth { animation: al-talk .2s ease-in-out infinite alte
   const STERK = [['lopen', 'liep', 'loopte'], ['zingen', 'zong', 'zingde'], ['schrijven', 'schreef', 'schrijfde'], ['eten', 'at', 'eette'], ['drinken', 'dronk', 'drinkte'], ['slapen', 'sliep', 'slaapte'], ['vinden', 'vond', 'vindde'], ['kijken', 'keek', 'kijkte'], ['zwemmen', 'zwom', 'zwemde'], ['geven', 'gaf', 'geefde'], ['lezen', 'las', 'leesde'], ['komen', 'kwam', 'koomde']];
   const blank = '<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>';
 
-  /* ---- Engels (groep 7–9) ---- */
+  /* ---- Engels (groep 7–8) ---- */
   const EN = [
     [['kat', 'cat', '🐱'], ['hond', 'dog', '🐶'], ['paard', 'horse', '🐴'], ['koe', 'cow', '🐄'], ['vogel', 'bird', '🐦'], ['vis', 'fish', '🐟'], ['varken', 'pig', '🐷'], ['schaap', 'sheep', '🐑'], ['muis', 'mouse', '🐭'], ['konijn', 'rabbit', '🐰'], ['beer', 'bear', '🐻'], ['kip', 'chicken', '🐔']],
     [['rood', 'red', '🟥'], ['blauw', 'blue', '🟦'], ['geel', 'yellow', '🟨'], ['groen', 'green', '🟩'], ['zwart', 'black', '⬛'], ['wit', 'white', '⬜'], ['paars', 'purple', '🟪'], ['oranje', 'orange', '🟧'], ['bruin', 'brown', '🟫'], ['roze', 'pink', '🩷']],
@@ -6010,7 +6019,7 @@ body.qa-talk .alina .al-mouth { animation: al-talk .2s ease-in-out infinite alte
     [['potlood', 'pencil', '✏️'], ['stoel', 'chair', '🪑'], ['deur', 'door', '🚪'], ['huis', 'house', '🏠'], ['raam', 'window', '🪟'], ['fiets', 'bike', '🚲'], ['auto', 'car', '🚗'], ['klok', 'clock', '🕒'], ['tas', 'bag', '👜'], ['boek', 'book', '📖'], ['school', 'school', '🏫'], ['boom', 'tree', '🌳']],
   ];
 
-  /* ---- Begrijpend lezen (groep 4–9): [tekst, vraag, goed, fout, fout] ---- */
+  /* ---- Begrijpend lezen (groep 4–8): [tekst, vraag, goed, fout, fout] ---- */
   const BL = [
     [['Sam heeft een hond. De hond heet Bob. Bob is bruin en heeft een lange staart. Elke middag gaat Sam met Bob naar het park.', 'Welke kleur heeft Bob?', 'bruin', 'zwart', 'wit'],
      ['Sam heeft een hond. De hond heet Bob. Bob is bruin en heeft een lange staart. Elke middag gaat Sam met Bob naar het park.', 'Waar gaan Sam en Bob elke middag heen?', 'naar het park', 'naar school', 'naar de winkel'],
@@ -6074,6 +6083,7 @@ body.qa-talk .alina .al-mouth { animation: al-talk .2s ease-in-out infinite alte
           const x = fr(a, b), y = fr(c, d), ans = a * d === c * b ? 'Even groot' : a * d > c * b ? x : y;
           return { q: 'Welke breuk is het grootst?', say: `Wat is groter: ${frSay(a, b)} of ${frSay(c, d)}?`, show: eq(`${x} &nbsp;of&nbsp; ${y}`), ans, opts: [x, y, 'Even groot'] };
         }
+        if (L === 4 && groep() >= 7 && Math.random() < .6) { const [d1, D] = pk([[2, 4], [2, 8], [4, 8], [3, 6], [5, 10], [3, 9], [4, 12]]), n1 = R(1, d1 - 1), b = R(1, D - 1 - n1 * (D / d1)), s = n1 * (D / d1) + b; return { q: 'Tel de breuken op. Let op: de noemers zijn anders.', say: `Hoeveel is ${frSay(n1, d1)} plus ${frSay(b, D)}?`, show: eq(`${fr(n1, d1)} + ${fr(b, D)} = ?`), ans: fr(s, D), opts: uniq([fr(s, D), fr(s + 1, D), fr(n1 + b, d1 + D)]), hint: `Maak eerst de noemers gelijk: ${D}.` }; }
         if (L === 4) { const d = R(3, 10), a = R(1, d - 2), b = R(1, d - 1 - a); const s = a + b; return { q: 'Tel de breuken op.', say: `Hoeveel is ${frSay(a, d)} plus ${frSay(b, d)}?`, show: eq(`${fr(a, d)} + ${fr(b, d)} = ?`), ans: fr(s, d), opts: uniq([fr(s, d), fr(s, 2 * d), fr(s + 1, d), fr(a * b, d)]).slice(0, 3) }; }
         if (L === 5) { const m = R(2, 5), d0 = pk([2, 3, 4, 5, 7]), n0 = R(1, d0 - 1); if (gcd(n0, d0) !== 1) return this.make(5); const n = n0 * m, d = d0 * m; return { q: 'Maak de breuk zo eenvoudig mogelijk.', say: `Maak ${frSay(n, d)} zo eenvoudig mogelijk.`, show: eq(`${fr(n, d)} = ?`), ans: fr(n0, d0), opts: uniq([fr(n0, d0), fr(n - 1, d - 1), fr(n0, d), fr(n, d0 + 1)]).slice(0, 3) }; }
         const P = [[1, 2, '0,5'], [1, 4, '0,25'], [3, 4, '0,75'], [1, 5, '0,2'], [2, 5, '0,4'], [1, 10, '0,1'], [3, 10, '0,3'], [7, 10, '0,7'], [1, 8, '0,125'], [3, 5, '0,6']], [n, d, a] = pk(P);
@@ -6117,16 +6127,24 @@ body.qa-talk .alina .al-mouth { animation: al-talk .2s ease-in-out infinite alte
           show: `<svg class="les-rect" viewBox="0 0 160 110"><rect x="20" y="10" width="120" height="70" rx="4" fill="#ffd23c" stroke="#1d2a4d" stroke-width="3"/><text x="80" y="100" text-anchor="middle" font-size="16" font-weight="800" fill="#1d2a4d">${l} cm</text><text x="148" y="50" font-size="16" font-weight="800" fill="#1d2a4d">${b}</text></svg>`,
           ans: a, opts: uniq([a, area ? `${2 * (l + b)} cm²` : `${l * b} cm`, area ? `${l + b} cm²` : `${l + b} cm`]) };
       } },
-    brug: { title: 'Brugklas rekenen', pic: '🧮', sub: 'Negatief, x, machten', col: '#1d2a4d', from: 8, step: 2,
-      levels: ['Negatieve getallen', 'Voorrangsregels', 'Machten', 'Vergelijkingen (x + 7 = 12)', 'Vergelijkingen (3x + 1 = 13)', 'Wortels'],
+    neg: { title: 'Negatieve getallen', pic: '🌡️', sub: 'Onder nul', col: '#1d2a4d', from: 7, step: 1,
+      levels: ['Op de thermometer', 'Welk getal is kleiner?', 'Optellen en aftrekken met min'],
       make(L) {
-        const o = (a, gen) => around(num(a), 4, () => num(gen()));
-        if (L === 1) { const a = R(-12, 12), b = R(-12, 12), plus = Math.random() < .5, r = plus ? a + b : a - b; const sb = b < 0 ? `(${num(b)})` : b; return { q: 'Reken het uit.', say: `Hoeveel is ${a < 0 ? 'min ' + numNl(-a) : numNl(a)} ${plus ? 'plus' : 'min'} ${b < 0 ? 'min ' + numNl(-b) : numNl(b)}?`, show: eq(`${num(a)} ${plus ? '+' : '−'} ${sb} = ?`), ans: num(r), opts: o(r, () => r + pk([-2, 2, -2 * b, 2 * b, -1, 1]) || r + 3), hint: 'Min en min is plus. Stel je een getallenlijn voor.' }; }
-        if (L === 2) { const a = R(2, 9), b = R(2, 9), c = R(2, 9), k = rnd(3); const [t, r, w] = k === 0 ? [`${a} + ${b} × ${c}`, a + b * c, (a + b) * c] : k === 1 ? [`${a} × ${b} − ${c}`, a * b - c, a * (b - c)] : [`(${a} + ${b}) × ${c}`, (a + b) * c, a + b * c]; return { q: 'Let op de voorrangsregels.', say: 'Reken het uit. Eerst haakjes, dan keer en delen, dan plus en min.', show: eq(`${t} = ?`), ans: num(r), opts: uniq([num(r), num(w), num(r + 1), num(r - 2)]).slice(0, 4), hint: 'Eerst haakjes, dan keer en delen, dan plus en min.' }; }
-        if (L === 3) { const b = R(2, 10), e = b <= 3 ? R(2, 4) : b === 10 ? R(2, 4) : 2, r = b ** e; return { q: 'Hoeveel is de macht?', say: `Hoeveel is ${numNl(b)} tot de macht ${numNl(e)}?`, show: eq(`${b}<sup>${e}</sup> = ?`), ans: String(r), opts: uniq([String(r), String(b * e), String(b + e), String(r + b)]).slice(0, 4), hint: `${b} tot de macht ${e} is ${e} keer ${b} met zichzelf vermenigvuldigen.` }; }
-        if (L === 4) { const x = R(1, 20), a = R(1, 15), plus = Math.random() < .5, rhs = plus ? x + a : x - a; return { q: 'Welk getal is x?', say: `Welk getal is x? x ${plus ? 'plus' : 'min'} ${numNl(a)} is ${rhs < 0 ? 'min ' + numNl(-rhs) : numNl(rhs)}.`, show: eq(`x ${plus ? '+' : '−'} ${a} = ${num(rhs)}`), ans: num(x), opts: o(x, () => x + pk([-2 * a, 2 * a, 1, -1, 2])) }; }
-        if (L === 5) { const x = R(1, 12), a = R(2, 9), c = R(0, 15), rhs = a * x + c; return { q: 'Welk getal is x?', say: `Welk getal is x? ${numNl(a)} x ${c ? 'plus ' + numNl(c) + ' ' : ''}is ${numNl(rhs)}.`, show: eq(`${a}x${c ? ' + ' + c : ''} = ${rhs}`), ans: num(x), opts: o(x, () => x + pk([-2, -1, 1, 2, 3])), hint: 'Haal eerst het losse getal weg, deel dan door het getal voor de x.' }; }
-        const k = R(2, 15), r = String(k); return { q: 'Hoeveel is de wortel?', say: `Hoeveel is de wortel uit ${numNl(k * k)}?`, show: eq(`√${k * k} = ?`), ans: r, opts: uniq([r, String(k + 1), String(k - 1), String(k * 2)]).slice(0, 4) };
+        const ns = v => v < 0 ? 'min ' + numNl(-v) : numNl(v);
+        if (L === 1) { const t = R(-9, 0), doel = R(1, 9), a = doel - t; return { q: 'Hoeveel graden erbij?', say: `Het is ${ns(t)} graden. Hoeveel graden moet het erbij om ${numNl(doel)} graden te worden?`, show: big(`🌡️ ${num(t)}° → ${doel}°`), ans: String(a), opts: around(String(a), 4, () => String(Math.max(1, a + pk([-3, -2, -1, 1, 2, 3])))), hint: 'Tel de graden op vanaf de min tot je bij het doel bent.' }; }
+        if (L === 2) { const a = R(-12, 12); let b = R(-12, 12); if (b === a) b = a + 1; return { q: 'Welk getal is het kleinst?', say: `Welk getal is het kleinst: ${ns(a)} of ${ns(b)}?`, show: eq(`${num(a)} &nbsp;of&nbsp; ${num(b)}`), ans: num(Math.min(a, b)), opts: [num(a), num(b)], hint: 'Hoe verder onder nul, hoe kleiner.' }; }
+        const a = R(-12, 12), b = R(1, 12), plus = Math.random() < .5, r = plus ? a + b : a - b;
+        return { q: 'Reken het uit.', say: `Hoeveel is ${ns(a)} ${plus ? 'plus' : 'min'} ${numNl(b)}?`, show: eq(`${num(a)} ${plus ? '+' : '−'} ${b} = ?`), ans: num(r), opts: around(num(r), 4, () => num(r + pk([-2, 2, -1, 1, -4, 4]))), hint: 'Denk aan de getallenlijn: plus gaat naar rechts, min naar links.' };
+      } },
+    verh: { title: 'Verhoudingen', pic: '⚖️', sub: 'Recepten en schaal', col: '#e8743b', from: 5, step: 1,
+      levels: ['Prijs per stuk', 'Recepten', 'Verhouding 1 op …', 'Verhouding als procent', 'Vergroten'],
+      make(L) {
+        if (L === 1) { const n = pk([2, 3, 4, 5]), p = R(2, 9), m = pk([2, 3, 4, 6, 7, 8, 10]); return { q: `${n} koekjes kosten ${eur(n * p)}. Hoeveel kosten ${m} koekjes?`, say: `${numNl(n)} koekjes kosten ${numNl(n * p)} euro. Hoeveel kosten ${numNl(m)} koekjes?`, show: big('🍪'), ans: eur(m * p), opts: around(eur(m * p), 4, () => eur(Math.max(1, m * p + pk([-p, p, 1, -1, 2 * p])))), hint: `Eerst: wat kost één koekje? Dat is ${numNl(p)} euro.` }; }
+        if (L === 2) { const m = pk([6, 8, 10, 12, 14, 16]), e = m / 2; return { q: `Voor 4 pannenkoeken heb je 2 eieren. Hoeveel eieren heb je voor ${m} pannenkoeken?`, say: `Voor vier pannenkoeken heb je twee eieren. Hoeveel eieren heb je voor ${numNl(m)} pannenkoeken?`, show: big('🥞'), ans: String(e), opts: around(String(e), 4, () => String(Math.max(1, e + pk([-2, -1, 1, 2, 3])))), hint: 'Hoe vaak past vier in dit aantal pannenkoeken?' }; }
+        if (L === 3) { const k = pk([3, 4, 5, 6]), m = R(2, 8), total = k * m; return { q: `De verhouding is 1 op ${k}: op elke ${k} kinderen is 1 begeleider. Er zijn ${total} kinderen. Hoeveel begeleiders zijn er?`, say: `De verhouding is één op ${numNl(k)}. Er zijn ${numNl(total)} kinderen. Hoeveel begeleiders zijn er?`, show: eq(`${total} : ${k} = ?`), ans: String(m), opts: around(String(m), 4, () => String(Math.max(1, m + pk([-2, -1, 1, 2, 3])))), hint: `Hoeveel groepjes van ${k} zitten er in ${total}?` }; }
+        if (L === 4) { const P = [[1, 2, '50%'], [1, 4, '25%'], [3, 4, '75%'], [1, 5, '20%'], [2, 5, '40%'], [1, 10, '10%'], [3, 10, '30%']], [n, d, a] = pk(P); return { q: 'Welk percentage hoort bij deze verhouding?', say: `Welk percentage hoort bij de verhouding ${numNl(n)} op ${numNl(d)}?`, show: eq(`${n} op ${d} = ?`), ans: a, opts: around(a, 4, () => pk(P)[2]), hint: 'Maak de verhouding af op 100: hoeveel van de 100 is dat?' }; }
+        const f = pk([2, 3, 4, 5]), b = R(2, 9);
+        return { q: `Een plaatje wordt ${f} keer zo groot. Een lijntje was ${b} cm. Hoe lang is het nu?`, say: `Een plaatje wordt ${numNl(f)} keer zo groot. Een lijntje was ${numNl(b)} centimeter. Hoe lang is het nu?`, show: eq(`${b} cm × ${f} = ?`), ans: `${b * f} cm`, opts: around(`${b * f} cm`, 4, () => `${Math.max(1, b * f + pk([-b, b, 1, -1]))} cm`), hint: `Reken uit: ${b} keer ${f}.` };
       } },
     engels: { title: 'Engels', pic: '🇬🇧', sub: 'Woordjes', col: '#2f8cff', from: 7, step: 1.5,
       levels: ['Dieren', 'Kleuren', 'Getallen', 'Eten', 'Huis en school'],
@@ -6160,9 +6178,9 @@ body.qa-talk .alina .al-mouth { animation: al-talk .2s ease-in-out infinite alte
 
   /* Start levels per groep for the games that were already there */
   const FLOOR = {
-    'sum-+': { 3: 1, 4: 6, 5: 10, 6: 12, 7: 13, 8: 14, 9: 15 }, 'sum--': { 3: 1, 4: 6, 5: 10, 6: 12, 7: 13, 8: 14, 9: 15 },
-    'sum-×': { 4: 1, 5: 3, 6: 6, 7: 8, 8: 9, 9: 10 }, 'sum-:': { 4: 1, 5: 3, 6: 6, 7: 8, 8: 9, 9: 10 },
-    clock: { 3: 1, 4: 3, 5: 4, 6: 5, 7: 5, 8: 5, 9: 5 }, money: { 3: 1, 4: 3, 5: 4, 6: 5, 7: 5, 8: 5, 9: 5 },
+    'sum-+': { 3: 1, 4: 6, 5: 10, 6: 12, 7: 13, 8: 14 }, 'sum--': { 3: 1, 4: 6, 5: 10, 6: 12, 7: 13, 8: 14 },
+    'sum-×': { 4: 1, 5: 3, 6: 6, 7: 8, 8: 9 }, 'sum-:': { 4: 1, 5: 3, 6: 6, 7: 8, 8: 9 },
+    clock: { 3: 1, 4: 3, 5: 4, 6: 5, 7: 5, 8: 5 }, money: { 3: 1, 4: 3, 5: 4, 6: 5, 7: 5, 8: 5 },
   };
   function groepFloor(k) {
     const g = groep();
@@ -6170,14 +6188,14 @@ body.qa-talk .alina .al-mouth { animation: al-talk .2s ease-in-out infinite alte
     const id = k.startsWith('les-') ? k.slice(4) : null, L = id && LESSONS[id];
     return L ? Math.max(1, Math.min(L.levels.length, 1 + Math.floor((g - L.from) * L.step))) : 1;
   }
+  /* Per groep de vakken uit de kerndoelen basisonderwijs (rekenen, taal, Engels). Groep 7 en 8 hebben dezelfde vakken, op een hoger niveau. */
   const LEER_BY_GROEP = {
     3: ['Plussommen', 'Minsommen', 'lezen', 'Letters schrijven', 'Welke letter?', 'Klokkijken', 'Geld tellen'],
     4: ['Plussommen', 'Minsommen', 'Keersommen', 'Deelsommen', 'lezen', 'spelling', 'lezen2', 'Klokkijken', 'Geld tellen'],
-    5: ['Plussommen', 'Minsommen', 'Keersommen', 'Deelsommen', 'breuk', 'meten', 'spelling', 'lezen2', 'Klokkijken', 'Geld tellen'],
-    6: ['Plussommen', 'Minsommen', 'Keersommen', 'Deelsommen', 'breuk', 'komma', 'meten', 'spelling', 'ww', 'lezen2', 'Klokkijken'],
-    7: ['Plussommen', 'Minsommen', 'Keersommen', 'Deelsommen', 'breuk', 'komma', 'procent', 'meten', 'ww', 'engels', 'lezen2'],
-    8: ['Keersommen', 'Deelsommen', 'breuk', 'komma', 'procent', 'meten', 'brug', 'ww', 'engels', 'lezen2'],
-    9: ['Keersommen', 'Deelsommen', 'breuk', 'komma', 'procent', 'meten', 'brug', 'ww', 'engels', 'lezen2'],
+    5: ['Plussommen', 'Minsommen', 'Keersommen', 'Deelsommen', 'breuk', 'meten', 'verh', 'spelling', 'lezen2', 'Klokkijken', 'Geld tellen'],
+    6: ['Plussommen', 'Minsommen', 'Keersommen', 'Deelsommen', 'breuk', 'komma', 'meten', 'verh', 'spelling', 'ww', 'lezen2', 'Klokkijken'],
+    7: ['Plussommen', 'Minsommen', 'Keersommen', 'Deelsommen', 'breuk', 'komma', 'procent', 'verh', 'neg', 'meten', 'ww', 'engels', 'lezen2'],
+    8: ['Plussommen', 'Minsommen', 'Keersommen', 'Deelsommen', 'breuk', 'komma', 'procent', 'verh', 'neg', 'meten', 'ww', 'engels', 'lezen2'],
   };
   function leerTiles(base) {
     return LEER_BY_GROEP[groep()].map(n => {
@@ -6192,15 +6210,16 @@ body.qa-talk .alina .al-mouth { animation: al-talk .2s ease-in-out infinite alte
       const g = +b.dataset.g; if (g === groep()) return;
       store('groep', g);
       [...Object.keys(FLOOR), ...Object.keys(LESSONS).map(id => 'les-' + id)].forEach(k => LV.set(k, groepFloor(k)));
-      sfx.tap(); say(g === 9 ? 'Groep negen, de brugklas!' : `Groep ${numNl(g)}!`); menu();
+      sfx.tap(); say(`Groep ${numNl(g)}!`); menu();
     });
   }
 /* QA:END leren.js */
 
 /* QA:BEGIN fit.js */
   /* ===== Queen Alina: grids whose number of cards changes are sized to the space, so nothing scrolls ===== */
-  const FIT = [['.mem-grid', 1], ['.items', .9], ['.cp-pages', 4 / 3], ['.pads', 1], ['.adv-map', 1.15], ['.room-shop', 1]];
-  function fitGrid(g, aspect) {
+  /* the third value lets cells grow wider and taller than the aspect so the grid fills the space */
+  const FIT = [['.mem-grid', 1], ['.items', .9, 1.3], ['.cp-pages', 4 / 3], ['.pads', 1], ['.adv-map', 1.15], ['.room-shop', 1, 1.3]];
+  function fitGrid(g, aspect, stretch = 1) {
     const kids = [...g.children].filter(k => k.offsetParent !== null || getComputedStyle(k).display !== 'none');
     const n = kids.length; if (!n) return;
     const cs = getComputedStyle(g);
@@ -6212,8 +6231,9 @@ body.qa-talk .alina .al-mouth { animation: al-talk .2s ease-in-out infinite alte
     for (let c = 1; c <= n; c++) {
       const r = Math.ceil(n / c), cw = (W - gx * (c - 1)) / c, ch = (H - gy * (r - 1)) / r;
       const w = Math.min(cw, ch * aspect);
-      if (w > 0 && (!best || w > best.w + .5)) best = { c, w: Math.floor(w), h: Math.floor(w / aspect) };
+      if (w > 0 && (!best || w > best.w + .5)) best = { c, w: Math.floor(w), h: Math.floor(w / aspect), cw, ch };
     }
+    if (best && stretch > 1) { const s = best.w; best.w = Math.floor(Math.min(best.cw, s * stretch)); best.h = Math.floor(Math.min(best.ch, s / aspect * stretch)); }
     if (!best) return;
     const cols = `repeat(${best.c}, ${best.w}px)`, rows = `${best.h}px`;
     if (g.style.gridTemplateColumns !== cols || g.style.gridAutoRows !== rows) {
@@ -6227,11 +6247,56 @@ body.qa-talk .alina .al-mouth { animation: al-talk .2s ease-in-out infinite alte
     if (fitQueued) return; fitQueued = true;
     requestAnimationFrame(() => {
       fitQueued = false;
-      for (const [sel, aspect] of FIT) document.querySelectorAll(sel).forEach(g => fitGrid(g, aspect));
+      for (const [sel, aspect, stretch] of FIT) document.querySelectorAll(sel).forEach(g => fitGrid(g, aspect, stretch));
+      fitContents();
     });
+  }
+  /* emoji pictures fill the space their box gets (Android's emoji font draws a glyph 1.25em wide and 1.36em high), text shrinks until it fits its box */
+  const GLYPHS = '.tile .pic, .items.qa-fit .item .ie';
+  const TEXTS = '.room-it small, .adv-node span';
+  function fitGlyph(el) {
+    if (el.querySelector('img, svg')) return;
+    const h = el.clientHeight, w = el.clientWidth;
+    if (h < 2 || w < 2) return;
+    const fs = Math.max(10, Math.min(110, h / 1.4, w / 1.3)) + 'px';
+    if (el.style.fontSize !== fs) el.style.fontSize = fs;
+  }
+  function fitText(el) {
+    if (!el.clientWidth) return;
+    el.style.fontSize = '';
+    const cs = getComputedStyle(el), clipped = cs.overflow === 'hidden';
+    let fs = parseFloat(cs.fontSize);
+    const min = Math.max(8, fs * .55);
+    while (fs > min && (el.scrollWidth > el.clientWidth + 1 || clipped && el.scrollHeight > el.clientHeight + 1)) { fs *= .92; el.style.fontSize = fs + 'px'; }
+  }
+  /* a menu tile or a dress-up item: its texts shrink together until the picture keeps (almost) its share of the box */
+  function fitBox(t, picSel, textSel, share) {
+    t.querySelectorAll('.qa-hide').forEach(e => e.classList.remove('qa-hide'));
+    const pic = t.querySelector(picSel), texts = [...t.querySelectorAll(textSel)].filter(e => e.offsetParent);
+    texts.forEach(fitText);
+    if (!pic) return;
+    const want = .9 * share * (t.clientHeight - parseFloat(getComputedStyle(t).paddingTop) * 2);
+    for (let k = 0; k < 8 && pic.clientHeight < want; k++) {
+      let shrunk = false;
+      for (const e of texts) { const fs = parseFloat(getComputedStyle(e).fontSize); if (fs > 9) { e.style.fontSize = fs * .9 + 'px'; shrunk = true; } }
+      if (!shrunk) break;
+    }
+    for (const e of texts) if (e.matches('.in') && (e.scrollWidth > e.clientWidth + 1 || e.scrollHeight > e.clientHeight + 1)) e.classList.add('qa-hide');
+  }
+  function fitContents() {
+    document.querySelectorAll('.tile').forEach(t => fitBox(t, '.pic', '.name, .age', .46));
+    document.querySelectorAll('.items.qa-fit .item').forEach(t => fitBox(t, '.ie', '.in, .ip', .5));
+    document.querySelectorAll(TEXTS).forEach(fitText);
+    document.querySelectorAll('.cp-pages.qa-fit .cp-free small').forEach(s => {
+      s.classList.remove('qa-hide');
+      const b = s.parentElement;
+      if (b.scrollHeight > b.clientHeight + 1 || s.scrollWidth > s.clientWidth + 1) s.classList.add('qa-hide');
+    });
+    document.querySelectorAll(GLYPHS).forEach(fitGlyph);
   }
   new MutationObserver(fitAll).observe(document.getElementById('app') || document.body, { childList: true, subtree: true });
   addEventListener('resize', () => { document.querySelectorAll('.qa-fit').forEach(g => { g.style.gridTemplateColumns = ''; g.style.gridAutoRows = ''; }); fitAll(); });
+  if (document.fonts) document.fonts.ready.then(fitAll);
 /* QA:END fit.js */
 
   const TABS = {

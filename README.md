@@ -29,7 +29,7 @@ Overal waar LOU stond, in tekst, knoppen, voorgelezen zinnen en tekst op het can
 
 ## Leren per groep
 
-Bij **Leren** kies je groep 3 t/m 9 (9 = brugklas). Elke groep heeft eigen lessen naar de leerlijnen van de basisschool, en sommen, klok en geld beginnen op het niveau van die groep:
+Bij **Leren** kies je groep 3 t/m 8 (de bovenste groep van de basisschool). Elke groep heeft eigen lessen naar de kerndoelen en tussendoelen van het basisonderwijs (SLO), en sommen, klok en geld beginnen op het niveau van die groep. Brugklasstof (machten, wortels, vergelijkingen) zit er niet in; groep 9 bestaat niet meer:
 
 | Groep | Lessen |
 | --- | --- |
@@ -37,10 +37,10 @@ Bij **Leren** kies je groep 3 t/m 9 (9 = brugklas). Elke groep heeft eigen lesse
 | 4 | + tafels en delen, spelling, begrijpend lezen |
 | 5 | + breuken, meten (lengte, gewicht, inhoud) |
 | 6 | + kommagetallen, werkwoorden (d/t) |
-| 7 | + procenten, Engels |
-| 8 en 9 | tafels en delen, breuken, kommagetallen, procenten, meten, brugklas rekenen (negatieve getallen, machten, wortels, vergelijkingen), werkwoorden, Engels, begrijpend lezen |
+| 7 | + procenten, negatieve getallen, Engels |
+| 8 | dezelfde lessen als groep 7, maar sommen en breuken beginnen op een hoger niveau |
 
-Elke les heeft levels; je hebt drie hartjes en gaat na vijf goede antwoorden een level hoger. `tools/check-lessons.js` controleert ruim 21.000 vragen: het goede antwoord staat tussen de keuzes, geen dubbele keuzes, kommagetallen met een komma.
+Elke les heeft levels; je hebt drie hartjes en gaat na vijf goede antwoorden een level hoger. `tools/check-lessons.js` controleert ruim 22.000 vragen: het goede antwoord staat tussen de keuzes, geen dubbele keuzes, kommagetallen met een komma.
 
 ## Telefoons
 

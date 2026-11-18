@@ -72,10 +72,11 @@ public final class SmokeInstrumentation extends Instrumentation {
             waitFor("!!document.querySelector('.tile')", "true", 4000);
 
             js("document.querySelector('.tab[data-t=\"leer\"]').click()");
-            waitFor("document.querySelectorAll('.groep').length", "7", 4000);
-            js("document.querySelector('.groep[data-g=\"9\"]').click()");
-            waitFor("[].some.call(document.querySelectorAll('.tile .name'),function(n){return n.textContent==='Brugklas rekenen';})", "true", 4000);
-            check(js("localStorage.getItem('speeltuin-groep')").equals("9"), "Groep 3 to 9 can be chosen; groep 9 shows brugklas lessons");
+            waitFor("document.querySelectorAll('.groep').length", "6", 4000);
+            js("document.querySelector('.groep[data-g=\"8\"]').click()");
+            waitFor("[].some.call(document.querySelectorAll('.tile .name'),function(n){return n.textContent==='Negatieve getallen';})", "true", 4000);
+            check(js("localStorage.getItem('speeltuin-groep')").equals("8") && js("!!document.querySelector('.groep[data-g=\"9\"]')").equals("false"),
+                "Groep 3 to 8 can be chosen (no groep 9); groep 8 shows negatieve getallen");
             js("document.querySelector('.groep[data-g=\"3\"]').click()");
             waitFor("localStorage.getItem('speeltuin-groep')", "3", 4000);
 

@@ -16,7 +16,7 @@ Overal waar een naam staat, staat de naam van het kind dat speelt. Is er geen pr
 
 ## Leren per groep
 
-Bij het tabblad **Leren** kies je de groep: 3, 4, 5, 6, 7, 8 of 9 (9 is de brugklas). Je ziet dan de lessen die bij die groep horen, zoals op school: lezen, spelling, begrijpend lezen, werkwoorden, sommen en tafels, klokkijken, geld, breuken, kommagetallen, procenten, meten, Engels en voor de brugklas negatieve getallen, machten, wortels en vergelijkingen. Sommen, klok en geld beginnen op het niveau van de gekozen groep.
+Bij het tabblad **Leren** kies je de groep: 3, 4, 5, 6, 7 of 8. Je ziet dan de lessen die bij die groep horen, zoals op school: lezen, spelling, begrijpend lezen, werkwoorden, sommen en tafels, klokkijken, geld, breuken, verhoudingen, kommagetallen, procenten, negatieve getallen, meten en Engels (vanaf groep 7). De lessen komen uit de kerndoelen en tussendoelen van het basisonderwijs (SLO); er is geen brugklasstof meer. Sommen, klok en geld beginnen op het niveau van de gekozen groep.
 
 ## Moeilijkere levels
 
