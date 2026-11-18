@@ -57,6 +57,8 @@ public final class SmokeInstrumentation extends Instrumentation {
             waitFor("!!document.querySelector('.tile')", "true", 8000);
             check(js("document.querySelector('.bar h1').textContent").contains("Queen Alina"), "Code 2021 opens the menu of Queen Alina");
             check(js("document.querySelectorAll('.tab').length").equals("7"), "All seven tabs are there");
+            check(js("document.querySelector('.bar .h1-lou').getBoundingClientRect().right <= document.getElementById('pal').getBoundingClientRect().left + 1").equals("true"),
+                "The title does not run into the buttons");
             check(js("localStorage.getItem('speeltuin-stars')").equals("37"), "Stars from the earlier app carried over");
 
             check(js("typeof speechSynthesis.speak==='function' && !!window.QAHost").equals("true"), "Device voice is connected to Android");

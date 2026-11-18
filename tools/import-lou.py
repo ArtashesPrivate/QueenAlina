@@ -38,6 +38,7 @@ PATCHES = [
      '<meta name="apple-mobile-web-app-title" content="Queen Alina">', 1),
     ('<h1>Spelen en Leren <span class="h1-lou">met LOU</span></h1>',
      '<h1>Spelen en Leren <span class="h1-lou">met Queen Alina</span></h1>', 2),
+    (".bar h1 .h1-lou { display: block; }", ".bar h1 .h1-lou { display: block; font-size: .74em; }", 1),
 
     # Offline: lettertypen uit de app, geen service worker, Android-spraak
     ('<link rel="preconnect" href="https://fonts.googleapis.com">\n', "", 1),
@@ -98,6 +99,10 @@ PATCHES = [
     # Moeilijkere levels: geld tot 100 euro
     ("const [lo, hi, coins] = [[1, 5, [1, 2]], [2, 10, [1, 2, 5]], [5, 20, [1, 2, 5, 10]]][Math.min(s.n, 3) - 1];",
      "const [lo, hi, coins] = [[1, 5, [1, 2]], [2, 10, [1, 2, 5]], [5, 20, [1, 2, 5, 10]], [10, 50, [1, 2, 5, 10, 20]], [20, 100, [1, 2, 5, 10, 20, 50]]][Math.min(s.n, 5) - 1];", 1),
+    (".mo-purse { display: flex; gap: 16px;",
+     ".mo-purse:has(> :nth-child(5)) .note { width: clamp(84px, min(24vw, 18vh), 150px); }\n"
+     ".mo-purse:has(> :nth-child(5)) .coin { width: clamp(54px, min(14vw, 10vh), 90px); }\n"
+     ".mo-purse { display: flex; flex-wrap: wrap; gap: 10px 16px;", 1),
     (".note.n10 {",
      ".note.n20 { background: linear-gradient(135deg, #5f8fd8, #a9c6f2); border: 3px solid #3d6bb5; }\n"
      ".note.n50 { background: linear-gradient(135deg, #f0a040, #f8cf95); border: 3px solid #c77a1f; }\n"

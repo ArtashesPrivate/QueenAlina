@@ -947,7 +947,9 @@ svg .fix-l { fill: none; stroke: #1d2a4d; stroke-width: 3; stroke-linecap: round
 .mo-tray { flex: 1; min-height: 0; display: flex; flex-wrap: wrap; gap: 8px; align-content: center; justify-content: center; overflow: hidden; }
 .mo-sum { text-align: center; font-family: var(--font-display); font-weight: 800; font-size: clamp(22px, 4vh, 32px); }
 .mo-hint { color: var(--ink-soft); font-weight: 800; }
-.mo-purse { display: flex; gap: 16px; justify-content: center; align-items: center; }
+.mo-purse:has(> :nth-child(5)) .note { width: clamp(84px, min(24vw, 18vh), 150px); }
+.mo-purse:has(> :nth-child(5)) .coin { width: clamp(54px, min(14vw, 10vh), 90px); }
+.mo-purse { display: flex; flex-wrap: wrap; gap: 10px 16px; justify-content: center; align-items: center; }
 .mo-btn, .mo-paid { padding: 4px; border-radius: 16px; }
 .mo-btn:active, .mo-paid:active { transform: translateY(3px); }
 .mo { display: inline-grid; place-items: center; font-family: var(--font-display); font-weight: 800; line-height: 1; box-shadow: 0 4px 0 rgba(0,0,0,.2); }
@@ -1087,7 +1089,7 @@ svg .fix-l { fill: none; stroke: #1d2a4d; stroke-width: 3; stroke-linecap: round
 /* ===== Phone held upright ===== */
 @media (max-width: 520px) and (orientation: portrait) {
   .bar h1 { font-size: 20px; }
-  .bar h1 .h1-lou { display: block; }
+  .bar h1 .h1-lou { display: block; font-size: .74em; }
   .round { width: 42px; height: 42px; font-size: 20px; }
   .stars { padding: 4px 10px; font-size: 18px; }
   .hello-av { font-size: 44px; }
