@@ -37,7 +37,14 @@ public final class LessonTextTest {
         assertPool("WRONG_MATH", LessonText.WRONG_MATH);
         assertPool("WRONG_WORD", LessonText.WRONG_WORD);
         assertPool("WRONG_PATTERN", LessonText.WRONG_PATTERN);
+        assertPool("WRONG_FEED", LessonText.WRONG_FEED);
+        assertPool("WRONG_MEMORY", LessonText.WRONG_MEMORY);
+        assertPool("WRONG_HIDE", LessonText.WRONG_HIDE);
         assertPool("ROUND_DONE", LessonText.ROUND_DONE);
+        check(LessonText.feedPrompt("Mila", 4, "aardbei").equals("Geef Mila vier aardbeien."), "Feed instruction names the count and the food");
+        check(LessonText.feedPrompt("Bobby", 1, "botje").equals("Geef Bobby een botje."), "One item uses the singular");
+        check(LessonText.memoryPrompt().startsWith("Zoek twee dezelfde"), "Memory tells Alina to tap cards");
+        check(LessonText.hidePrompt("Pluis").contains("oortje"), "Hide and seek points at the visible ear");
         assertPool("NEW_FRIEND", LessonText.NEW_FRIEND);
         check(LessonText.CORRECT.length >= 12, "Enough correct-answer variety");
 

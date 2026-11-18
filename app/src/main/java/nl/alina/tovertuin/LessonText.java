@@ -58,6 +58,24 @@ public final class LessonText {
         "Geen zorg, kijk nog eens naar de volgorde."
     };
 
+    public static final String[] WRONG_FEED = {
+        "Dat hapje is het niet. Tik op het juiste eten.",
+        "Bijna! Kijk welk eten je vriendje wil.",
+        "Geen zorg, probeer een ander hapje."
+    };
+
+    public static final String[] WRONG_MEMORY = {
+        "Die twee zijn niet hetzelfde. Kijk nog eens.",
+        "Bijna! Zoek het plaatje dat erop lijkt.",
+        "Geen zorg, draai nog twee kaartjes om."
+    };
+
+    public static final String[] WRONG_HIDE = {
+        "Hier zit je vriendje niet. Kijk naar het oortje.",
+        "Bijna! Zoek het struikje met een oortje.",
+        "Geen zorg, probeer een ander struikje."
+    };
+
     /** Celebration after a full five-question round. Special, but calm. */
     public static final String[] ROUND_DONE = {
         "Hoera Alina! Je hebt vijf sterren verdiend!",
@@ -89,6 +107,25 @@ public final class LessonText {
     public static String wordPrompt() { return "Welk woord hoort bij dit dier? Kies het juiste woord."; }
 
     public static String patternPrompt() { return "Welke vorm komt hierna? Kijk goed naar de ketting."; }
+
+    /** "Geef Mila vier aardbeien." The number is the instruction, because Alina has to tap that many. */
+    public static String feedPrompt(String name, int count, String food) {
+        return "Geef " + name + " " + number(count) + " " + foodWord(food, count) + ".";
+    }
+
+    public static String memoryPrompt() { return "Zoek twee dezelfde plaatjes. Tik een kaartje open."; }
+
+    public static String hidePrompt(String name) {
+        return "Waar verstopt " + name + " zich? Tik op het struikje met het oortje.";
+    }
+
+    public static String foodWord(String food, int count) {
+        boolean one = count == 1;
+        if ("aardbei".equals(food)) return one ? "aardbei" : "aardbeien";
+        if ("wortel".equals(food)) return one ? "wortel" : "wortels";
+        if ("botje".equals(food)) return one ? "botje" : "botjes";
+        throw new IllegalArgumentException("Onbekend hapje: " + food);
+    }
 
     /** Picks an index in [0, count) that differs from {@code avoid}, so the same line is not repeated back to back. */
     public static int pick(Random random, int count, int avoid) {

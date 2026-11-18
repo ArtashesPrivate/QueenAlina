@@ -31,6 +31,7 @@ public class MainActivity extends Activity {
     private String screen="Thuis", gameType="", lastSpeech="", feedbackText="";
     private GameRules.Round round;
     private Item current;
+    PlayStage play;
     AlertDialog purchaseDialog;
     private int pendingParentAnswer, lastCorrect=-1, lastWrong=-1;
     private boolean advancePending;
@@ -42,8 +43,8 @@ public class MainActivity extends Activity {
 
     /** One question, generated once. Text on screen, pictures and the spoken prompt all come from this object. */
     private static final class Item {
-        String type, spoken, sum="";
-        int amount, targetPet, pattern, value;
+        String type, spoken, sum="", food="aardbei";
+        int amount, targetPet, pattern, value, seed;
         boolean answered;
         final ArrayList<String> choices=new ArrayList<>();
         int correct;
@@ -143,7 +144,7 @@ public class MainActivity extends Activity {
         advancePending=false; handler.removeCallbacks(advanceTask); current=null; feedbackText="";
     }
     private void render() {
-        stage=null; bubble=null; reactionPet=null;
+        stage=null; bubble=null; reactionPet=null; play=null;
         shell=column(); shell.setBackgroundColor(CREAM);
         shell.setOnApplyWindowInsetsListener((v,insets)-> {
             if(Build.VERSION.SDK_INT>=30) {
@@ -231,9 +232,9 @@ public class MainActivity extends Activity {
     }
     private void learn() {
         title("Samen leren","Kies een spel. Vijf opdrachten = vijf sterren!");
-        learningOption("Rekenbakkerij","Tel mee en maak sommen tot "+game.maxNumber+".","math",0,PEACH);
-        learningOption("Dierenwoorden","Welk woord hoort bij het dier?","words",1,LILAC);
-        learningOption("Toverketting","Ontdek het patroon en kies wat volgt.","pattern",2,GREEN);
+        learningOption("Hapjes tellen","Tik zelf de hapjes die je vriendje vraagt.","feed",0,PEACH);
+        learningOption("Memory","Draai kaartjes om en zoek twee dezelfde.","memory",1,LILAC);
+        learningOption("Verstoppertje","Zoek je vriendje achter het struikje.","hide",2,GREEN);
         gap(body,18); body.addView(text("Neem je tijd. Je mag altijd opnieuw proberen.",16,MUTED,false));
     }
     private void learningOption(String name,String desc,String type,int symbol,int color) {
@@ -251,70 +252,45 @@ public class MainActivity extends Activity {
     // ---- Question flow: generate once, display, speak, answer, reward, then advance automatically ----
 
     private Item newItem() {
-        Item item=new Item(); item.type=gameType;
-        if(gameType.equals("math")) {
-            int a,b,value; boolean subtract=random.nextBoolean();
-            if(subtract) { a=2+random.nextInt(game.maxNumber-1); b=1+random.nextInt(a); value=a-b; }
-            else { a=1+random.nextInt(game.maxNumber-1); b=1+random.nextInt(game.maxNumber-a); value=a+b; }
-            item.amount=a; item.value=value;
-            item.sum=a+(subtract?" − ":" + ")+b+" = ?";
-            item.spoken=LessonText.mathPrompt(a,b,subtract);
-            item.choices.add(String.valueOf(value));
-            while(item.choices.size()<3) { String v=String.valueOf(random.nextInt(game.maxNumber+1)); if(!item.choices.contains(v))item.choices.add(v); }
-        } else if(gameType.equals("words")) {
-            int[] pets={0,1,2,3,9}; String[] words={"hond","kat","dino","konijn","vos"};
-            int target=random.nextInt(words.length); item.targetPet=pets[target]; item.value=target;
-            item.spoken=LessonText.wordPrompt();
-            item.choices.add(words[target]);
-            while(item.choices.size()<3) { String v=words[random.nextInt(words.length)]; if(!item.choices.contains(v))item.choices.add(v); }
-        } else {
-            int value=random.nextInt(3); int other=(value+1+random.nextInt(2))%3;
-            item.pattern=value*3+other; item.value=value;
-            item.spoken=LessonText.patternPrompt();
-            item.choices.add("cirkel"); item.choices.add("ster"); item.choices.add("vierkant");
-        }
-        if(gameType.equals("pattern")) {
-            item.correct=item.value;
-        } else {
-            String correct=item.choices.get(0); Collections.shuffle(item.choices,random); item.correct=item.choices.indexOf(correct);
+        Item item=new Item(); item.type=gameType; item.seed=random.nextInt(); item.correct=0;
+        String name=game.names[game.activePet];
+        if(gameType.equals("memory")) item.spoken=LessonText.memoryPrompt();
+        else if(gameType.equals("hide")) item.spoken=LessonText.hidePrompt(name);
+        else {
+            gameType="feed"; item.type="feed";
+            String[] foods={"aardbei","wortel","botje"};
+            item.food=foods[random.nextInt(foods.length)];
+            int max=Math.max(2, Math.min(5, game.maxNumber));
+            item.value=2+random.nextInt(max-1);
+            item.spoken=LessonText.feedPrompt(name, item.value, item.food);
         }
         return item;
     }
 
     private void question() {
-        if(round==null) { round=new GameRules.Round(); gameType="math"; }
+        if(round==null) { round=new GameRules.Round(); gameType="feed"; }
         if(round.solved>=5) { finished(); return; }
         if(current==null||!current.type.equals(gameType)) current=newItem();
         answerLocked=current.answered;
-        String name=gameType.equals("math")?"Rekenbakkerij":gameType.equals("words")?"Dierenwoorden":"Toverketting";
+        String name=gameType.equals("memory")?"Memory":gameType.equals("hide")?"Verstoppertje":"Hapjes tellen";
         int shown=round.solved+(current.answered?0:1);
-        title(name,"Opdracht "+shown+" van 5 · samen op weg naar 5 sterren");
+        title(name,"Opdracht "+shown+" van 5 · tik op het speelveld");
         ProgressBar progress=new ProgressBar(this,null,android.R.attr.progressBarStyleHorizontal); progress.setMax(5); progress.setProgress(round.solved);
-        progress.setProgressTintList(android.content.res.ColorStateList.valueOf(PURPLE)); body.addView(progress,new LinearLayout.LayoutParams(-1,dp(8))); gap(body,24);
-        if(gameType.equals("math")) {
-            TextView sum=text(current.sum,42,PLUM,true); sum.setGravity(Gravity.CENTER); body.addView(sum); gap(body,18);
-            Symbols amounts=new Symbols(this,3,current.amount); amounts.setContentDescription(current.amount+" telsterren"); body.addView(amounts,new LinearLayout.LayoutParams(-1,dp(100)));
-            TextView hint=text("Je mag de sterren gebruiken om te tellen.",15,MUTED,false); hint.setGravity(Gravity.CENTER); body.addView(hint);
-            reactionPet=new CharacterView(this,game.activePet).thumbnail(); body.addView(reactionPet,new LinearLayout.LayoutParams(-1,dp(110)));
-        } else if(gameType.equals("words")) {
-            CharacterView animal=new CharacterView(this,current.targetPet).thumbnail(); animal.setContentDescription("Een dier. Kies het woord dat erbij hoort.");
-            body.addView(animal,new LinearLayout.LayoutParams(-1,dp(190)));
-            reactionPet=animal;
-        } else {
-            Symbols pattern=new Symbols(this,4,current.pattern); pattern.setContentDescription("Bekijk de ketting met afwisselende vormen. Welke vorm komt hierna?");
-            body.addView(pattern,new LinearLayout.LayoutParams(-1,dp(130)));
-            reactionPet=new CharacterView(this,game.activePet).thumbnail(); body.addView(reactionPet,new LinearLayout.LayoutParams(-1,dp(110)));
-        }
-        // The line on screen is exactly the line that is spoken.
-        TextView q=text(current.spoken,23,PLUM,true); q.setGravity(Gravity.CENTER); body.addView(q); gap(body,16);
-        for(int i=0;i<current.choices.size();i++) {
-            final int index=i; String label=current.choices.get(i);
-            if(gameType.equals("pattern")) {
-                LinearLayout line=row(); Symbols shape=new Symbols(this,5,i); line.addView(shape,new LinearLayout.LayoutParams(dp(48),dp(48)));
-                Button b=button(label,false,()->answer(index)); line.addView(b,new LinearLayout.LayoutParams(0,-2,1)); body.addView(line); gap(body,10);
-            } else addButton(label,false,()->answer(index));
-        }
-        feedback=text(feedbackText,18,PLUM,true); feedback.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE); gap(body,14); body.addView(feedback);
+        progress.setProgressTintList(android.content.res.ColorStateList.valueOf(PURPLE)); body.addView(progress,new LinearLayout.LayoutParams(-1,dp(8))); gap(body,12);
+        TextView q=text(current.spoken,22,PLUM,true); q.setGravity(Gravity.CENTER); body.addView(q); gap(body,10);
+        LinearLayout arena=row();
+        reactionPet=new CharacterView(this,game.activePet).thumbnail();
+        arena.addView(reactionPet,new LinearLayout.LayoutParams(dp(108),dp(200)));
+        int boardKind=gameType.equals("memory")?1:gameType.equals("hide")?2:0;
+        play=new PlayStage(this,boardKind,current.value,current.food,current.seed,new PlayStage.Listener() {
+            @Override public void solved() { answer(0); }
+            @Override public void mistake(String hint) {
+                feedbackText=hint; if(feedback!=null)feedback.setText(hint); say(hint);
+            }
+        });
+        arena.addView(play,new LinearLayout.LayoutParams(0,dp(230),1));
+        body.addView(arena);
+        feedback=text(feedbackText,18,PLUM,true); feedback.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE); gap(body,8); body.addView(feedback);
         addButton("Luister naar de opdracht",false,this::speakPrompt);
     }
 
@@ -326,7 +302,7 @@ public class MainActivity extends Activity {
     private void answer(int index) {
         if(answerLocked || round==null || current==null)return;
         if(index!=current.correct) {
-            String[] pool=gameType.equals("math")?LessonText.WRONG_MATH:gameType.equals("words")?LessonText.WRONG_WORD:LessonText.WRONG_PATTERN;
+            String[] pool=gameType.equals("memory")?LessonText.WRONG_MEMORY:gameType.equals("hide")?LessonText.WRONG_HIDE:LessonText.WRONG_FEED;
             lastWrong=LessonText.pick(random,pool.length,lastWrong);
             feedbackText=pool[lastWrong];
             if(feedback!=null)feedback.setText(feedbackText);
@@ -449,7 +425,7 @@ public class MainActivity extends Activity {
     private void parents() {
         title("Voor ouders","Een eerste speelbare versie, speciaal voor Alina.");
         body.addView(text("Rekenniveau",21,PLUM,true)); gap(body,10);
-        for(int max:new int[]{10,20})addButton("Sommen tot "+max+(game.maxNumber==max?" · gekozen":""),game.maxNumber==max,()->{game.maxNumber=max;store.save(game);render();});
+        for(int max:new int[]{10,20})addButton("Tellen tot "+max+(game.maxNumber==max?" · gekozen":""),game.maxNumber==max,()->{game.maxNumber=max;store.save(game);render();});
         gap(body,24);body.addView(text("Nederlandse stem",21,PLUM,true));gap(body,10);
         body.addView(text(voiceReady?"Een Nederlandse stem is beschikbaar.":"Er is nog geen bruikbare offline Nederlandse stem. Installeer Nederlandse spraakgegevens via de steminstellingen van Android.",16,MUTED,false));
         addButton(game.sound?"Geluid staat aan":"Geluid staat uit",game.sound,()->{game.sound=!game.sound;store.save(game);render();});
@@ -460,7 +436,7 @@ public class MainActivity extends Activity {
         });
         gap(body,24);body.addView(text("Voortgang",21,PLUM,true));gap(body,10);
         body.addView(text(game.completedRounds+" afgeronde leerrondjes\n"+game.stars+" sterren beschikbaar\n"+game.petCount()+" dierenvriendjes",17,PLUM,false));
-        gap(body,20);body.addView(text("De activiteiten oefenen rekenen, dierennamen lezen en patronen. Ze volgen geen specifieke schoolmethode. Een fout antwoord kost geen sterren.\n\nAlles blijft op dit apparaat. Geen advertenties, accounts, microfoon of aankopen met echt geld. De dieren worden niet ziek wanneer Alina niet speelt.\n\nDe poppetjes gebruiken 2D-poses met beweging. Nederlandse stemmen worden door Android geleverd.",15,MUTED,false));
+        gap(body,20);body.addView(text("De spellen zijn hapjes aantikken, memory en verstoppertje. Een fout tik kost geen sterren.\n\nAlles blijft op dit apparaat. Geen advertenties, accounts, microfoon of aankopen met echt geld. De dieren worden niet ziek wanneer Alina niet speelt.",15,MUTED,false));
         addButton("Terug naar Alina",true,()->navigate("Thuis"));
     }
     private void say(String line) { say(line,"line-"+SystemClock.uptimeMillis()); }

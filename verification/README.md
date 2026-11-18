@@ -1,5 +1,9 @@
 # Verification
 
+## 2026-11-18 — speelbare spellen
+
+Na het bekijken van Spelen met LOU (hapjes aantikken, memory, verstoppertje) zijn de tekstkeuzes vervangen door drie tikspellen: Hapjes tellen, Memory en Verstoppertje. Schermen: `phone-feed-game-small.png`, `phone-memory-small.png`. Op de Android 16-emulator: 190 controles geslaagd, inclusief fout hapje zonder straf, juiste hapjes met automatische volgende opdracht, een memory-paar en een fout struikje.
+
 ## 2026-11-18 — Queen Alina: Leer & Speel (versie 0.2.x)
 
 Ondertekening en update-pad

@@ -28,9 +28,13 @@ In **Winkel** kun je met sterren nieuwe dieren verwelkomen: hamster (20), egel (
 
 ## Leren
 
-- **Rekenbakkerij:** optellen en aftrekken tot 10; ouders kunnen op 20 zetten.
-- **Dierenwoorden:** kies het juiste woord bij een dier. Dit is introductie-woordenschat, geen volledig leesprogramma.
-- **Toverketting:** patronen met afwisselende vormen afmaken.
+De leerspellen zijn echt te spelen, niet alleen een tekstkeuze:
+
+- **Hapjes tellen:** je vriendje vraagt om een aantal hapjes. Je tikt ze zelf aan tussen andere dingen. Een fout hapje telt niet.
+- **Memory:** draai kaartjes om en zoek twee dezelfde.
+- **Verstoppertje:** zoek het struikje waar een oortje uitsteekt.
+
+Ouders kunnen tellen tot 10 of tot 20 zetten. De hapjes op het scherm blijven een klein aantal, zodat alles in één blik past.
 
 ## Stem
 

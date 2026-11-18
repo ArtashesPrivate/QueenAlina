@@ -7,7 +7,6 @@ import android.os.SystemClock;
 import android.view.*;
 import android.widget.*;
 import java.util.*;
-import java.util.regex.*;
 
 /** Native device regression runner without third-party test dependencies. */
 public final class SmokeInstrumentation extends Instrumentation {
@@ -30,7 +29,8 @@ public final class SmokeInstrumentation extends Instrumentation {
         for(TextView v:labels())if(v instanceof Button && v.getText().toString().equals(text)) {v.performClick();return;}
         throw new AssertionError("Missing native button: "+text);
     }
-    private void startMath() { click("Leren");click("Spelen"); }
+    private void startFeed() { click("Leren");click("Spelen"); }
+    private PlayStage board() { return ((MainActivity)activity).play; }
     private void onMain(Runnable action) {
         final Throwable[] failure={null};
         super.runOnMainSync(()->{try{action.run();}catch(Throwable t){failure[0]=t;}});
@@ -50,39 +50,30 @@ public final class SmokeInstrumentation extends Instrumentation {
     private void playAt(int index) { int n=0;for(TextView v:labels())if(v instanceof Button && v.getText().toString().equals("Spelen")) {if(n++==index){v.performClick();return;}}throw new AssertionError("Missing game "+index); }
     private GameRules state() { return new GameStore(getTargetContext()).load(); }
 
-    private void mathRound(boolean wrongFirst) {
-        onMain(this::startMath);
-        Pattern pattern=Pattern.compile("(\\d+) ([+−]) (\\d+) = \\?");
+    private void feedRound(boolean wrongFirst) {
+        onMain(this::startFeed);
         for(int q=0;q<5;q++) {
             final int number=q+1;
-            final int[] answer={-1};
-            final String[] expected={""};
             onMain(()-> {
-                for(TextView v:labels()) {
-                    Matcher m=pattern.matcher(v.getText());
-                    if(m.matches()) {
-                        int a=Integer.parseInt(m.group(1)),b=Integer.parseInt(m.group(3));
-                        boolean subtract=m.group(2).equals("−");
-                        answer[0]=subtract?a-b:a+b;
-                        expected[0]=LessonText.mathPrompt(a,b,subtract);
-                    }
-                }
-                check(answer[0]>=0,"Math question "+number+" renders");
-                check(has(expected[0]),"Spoken and shown prompt are the same sentence: "+expected[0]);
+                PlayStage board=board();
+                check(board!=null && board.target()>=2,"Feed board "+number+" is on screen");
+                String expected=LessonText.feedPrompt(state().names[state().activePet], board.target(), board.food());
+                check(has(expected),"Spoken and shown prompt are the same sentence: "+expected);
                 check(hasStarting("Opdracht "+number+" van 5"),"Question counter matches question "+number);
+                check(board.getContentDescription()!=null && board.getContentDescription().toString().contains(board.food()),"Board names the food Alina must tap");
             });
             if(wrongFirst&&q==0) {
                 onMain(()-> {
-                    for(TextView v:labels())if(v instanceof Button && v.getText().toString().matches("\\d+") && !v.getText().toString().equals(String.valueOf(answer[0]))) {v.performClick();break;}
+                    check(board().tapDistractor(),"A wrong snack can be tapped");
                     boolean encouraged=false;
-                    for(String line:LessonText.WRONG_MATH)encouraged|=has(line);
-                    check(encouraged,"Wrong answer shows an encouraging hint");
+                    for(String line:LessonText.WRONG_FEED)encouraged|=has(line);
+                    check(encouraged,"Wrong snack shows an encouraging hint");
                 });
                 SystemClock.sleep(2600);
-                onMain(()->check(hasStarting("Opdracht 1 van 5"),"Wrong answer does not advance automatically"));
+                onMain(()->check(hasStarting("Opdracht 1 van 5"),"Wrong snack does not advance automatically"));
             }
-            onMain(()->click(String.valueOf(answer[0])));
-            if(q<4) check(waitUntil("Opdracht "+(q+2)+" van 5",12000),"Correct answer advances automatically to question "+(q+2));
+            onMain(()-> { PlayStage board=board(); while(board.given()<board.target()) check(board.tapNextFood(),"Tapping the right snack counts"); });
+            if(q<4) check(waitUntil("Opdracht "+(q+2)+" van 5",12000),"Correct snacks advance automatically to question "+(q+2));
         }
         onMain(()->check(has("+5 sterren"),"Round completion displays reward"));
     }
@@ -98,9 +89,9 @@ public final class SmokeInstrumentation extends Instrumentation {
             });
             onMain(()->check(state().petCount()>=4,"Starter animals available"));
             int initial=state().stars, rounds=state().completedRounds;
-            mathRound(true);
+            feedRound(true);
             onMain(()->check(state().stars==initial+5,"Round saves exactly five stars"));
-            for(int i=0;i<3;i++)mathRound(false);
+            for(int i=0;i<3;i++)feedRound(false);
             onMain(()->check(state().stars==initial+20,"Four real UI rounds earn twenty stars"));
             onMain(()-> {
                 click("Winkel");check(has("De dierenwinkel"),"Animal shop opens");
@@ -120,8 +111,16 @@ public final class SmokeInstrumentation extends Instrumentation {
                 int hunger=s.needs[4][0],rest=s.needs[4][2];
                 click("Eten geven");check(state().needs[4][0]>hunger,"Feeding restores the selected pet");
                 click("Slapen");check(state().needs[4][2]>rest,"Sleep restores rest");
-                click("Leren");playAt(1);check(has("Welk woord hoort bij dit dier? Kies het juiste woord."),"Dutch word game renders");
-                click("Thuis");click("Leren");playAt(2);check(has("Welke vorm komt hierna? Kijk goed naar de ketting."),"Pattern game renders");
+                click("Leren");playAt(1);
+                check(has(LessonText.memoryPrompt()),"Memory game shows the tap instruction");
+                int[] pair=board().openPair();
+                board().tapCard(pair[0]); board().tapCard(pair[1]);
+                check(board().matchedCount()==2,"A matching pair stays open");
+                click("Thuis");click("Leren");playAt(2);
+                check(has(LessonText.hidePrompt(state().names[state().activePet])),"Hide and seek shows where to look");
+                int wrong=board().hidingSpot()==0?1:0;
+                board().tapBush(wrong);
+                check(hasStarting("Opdracht 1 van 5"),"Wrong bush does not advance");
                 click("Thuis");activity.finish();
             });
             activity=startActivitySync(intent);
