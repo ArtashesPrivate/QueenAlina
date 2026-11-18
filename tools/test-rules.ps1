@@ -11,3 +11,7 @@ if ($LASTEXITCODE -ne 0) { throw 'Compilation failed' }
 if ($LASTEXITCODE -ne 0) { throw 'Game rule checks failed' }
 node (Join-Path $PSScriptRoot 'check-levels.js')
 if ($LASTEXITCODE -ne 0) { throw 'Level checks failed' }
+python (Join-Path $PSScriptRoot 'build-web.py') --check
+if ($LASTEXITCODE -ne 0) { throw 'index.html is out of sync with web-src' }
+node (Join-Path $PSScriptRoot 'check-lessons.js')
+if ($LASTEXITCODE -ne 0) { throw 'Lesson checks failed' }

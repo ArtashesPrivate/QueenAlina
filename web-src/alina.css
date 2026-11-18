@@ -1,0 +1,38 @@
+/* ===== Queen Alina: animated character ===== */
+.alina { overflow: visible; }
+.alina g { transform-box: view-box; }
+.alina .al-all { transform-origin: 100px 190px; animation: al-breathe 3.4s ease-in-out infinite; }
+.alina .al-head { transform-origin: 100px 128px; animation: al-tilt 7s ease-in-out infinite; }
+.alina .al-eyes { transform-origin: 100px 86px; animation: al-blink 4.6s infinite; }
+.alina .al-look { animation: al-look 9s ease-in-out infinite; }
+.alina .al-armL { transform-origin: 76px 138px; animation: al-armL 3.4s ease-in-out infinite; }
+.alina .al-armR { transform-origin: 124px 138px; animation: al-armR 3.4s ease-in-out infinite; }
+.alina .al-curlL { transform-origin: 56px 84px; animation: al-curl 3.4s ease-in-out infinite; }
+.alina .al-curlR { transform-origin: 144px 84px; animation: al-curl 3.4s ease-in-out infinite reverse; }
+.alina .al-dress { transform-origin: 100px 130px; animation: al-skirt 3.4s ease-in-out infinite; }
+.alina .al-flower { transform-origin: 141px 40px; animation: al-flower 5s ease-in-out infinite; }
+.alina .al-mouth { transform-origin: 100px 110px; }
+body.qa-talk .alina .al-mouth { animation: al-talk .2s ease-in-out infinite alternate; }
+.yay .alina .al-armL, .alina.yay .al-armL { animation: al-cheerL .6s ease-out; }
+.yay .alina .al-armR, .alina.yay .al-armR { animation: al-cheerR .6s ease-out; }
+.hmm .alina .al-head { animation: al-no .45s; }
+.den.night .alina .al-eyes { animation: none; transform: scaleY(.08); }
+.den.night .alina .al-head { animation: none; transform: rotate(-8deg); }
+/* many small copies at once (memory cards, tabs): keep them calm */
+.mcard .alina *, .tab .alina *, .round .alina * { animation: none !important; }
+@media (prefers-reduced-motion: reduce) { .alina * { animation: none !important; } }
+@keyframes al-breathe { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.012, 1.022); } }
+@keyframes al-tilt { 0%, 100% { transform: rotate(0); } 22% { transform: rotate(-4deg); } 50% { transform: rotate(3deg); } 72% { transform: rotate(0); } }
+@keyframes al-blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.08); } }
+@keyframes al-look { 0%, 30%, 100% { transform: translate(0, 0); } 40%, 55% { transform: translate(-2.5px, .5px); } 65%, 85% { transform: translate(2.5px, 0); } }
+@keyframes al-armL { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(7deg); } }
+@keyframes al-armR { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-7deg); } }
+@keyframes al-curl { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(4deg); } }
+@keyframes al-skirt { 0%, 100% { transform: skewX(0); } 50% { transform: skewX(2deg); } }
+@keyframes al-flower { 0%, 100% { transform: rotate(0) scale(1); } 50% { transform: rotate(12deg) scale(1.06); } }
+@keyframes al-talk { from { transform: scaleY(.45); } to { transform: scaleY(1.35); } }
+@keyframes al-cheerL { 0% { transform: rotate(0); } 40%, 70% { transform: rotate(125deg); } 100% { transform: rotate(0); } }
+@keyframes al-cheerR { 0% { transform: rotate(0); } 40%, 70% { transform: rotate(-125deg); } 100% { transform: rotate(0); } }
+@keyframes al-no { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-7deg); } 75% { transform: rotate(7deg); } }
+.av-svg svg.headcap { position: absolute; inset: 0; width: 100%; height: 100%; clip-path: ellipse(34% 30% at 50% 36%); pointer-events: none; }
+.av-svg svg.facecap { position: absolute; inset: 0; width: 100%; height: 100%; clip-path: ellipse(23% 13% at 50% 43%); pointer-events: none; }

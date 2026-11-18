@@ -55,6 +55,8 @@ jobs:
           javac --release 17 -encoding UTF-8 -d build/rule-tests app/src/main/java/nl/alina/tovertuin/GameRules.java tools/GameRulesTest.java
           java -cp build/rule-tests nl.alina.tovertuin.GameRulesTest
           node tools/check-levels.js
+          python3 tools/build-web.py --check
+          node tools/check-lessons.js
       - name: Build, compile device tests and lint
         env:
           ALINA_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}

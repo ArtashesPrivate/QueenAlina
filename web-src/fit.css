@@ -1,0 +1,82 @@
+/* ===== Queen Alina: everything on one screen on phones ===== */
+.qa-fit { display: grid !important; overflow: hidden !important; justify-content: center !important; align-content: center !important; max-width: none !important; }
+.mem-grid.qa-fit, .items.qa-fit, .pads.qa-fit, .adv-map.qa-fit { width: 100% !important; align-self: stretch; margin-inline: 0; }
+.qa-fit > * { width: 100% !important; height: 100% !important; min-width: 0; min-height: 0; max-width: none !important; max-height: none !important; box-sizing: border-box; overflow: hidden; }
+
+/* memory: card faces scale with the card */
+.mem-grid.qa-fit { gap: min(10px, 2vw); }
+.mem-grid.qa-fit .mcard .b { font-size: min(clamp(30px, 8vw, 58px), calc(var(--cell) * .6)); }
+.mem-grid.qa-fit .mcard .f .mlou { font-size: calc(var(--cell) * .8); }
+
+/* dress-up: all clothes visible at once */
+.items.qa-fit { gap: min(10px, 2vw); padding: 2px; }
+.items.qa-fit .item { padding: 2px; gap: 0; justify-content: center; border-radius: min(22px, calc(var(--cell) * .2)); border-width: 3px; }
+.items.qa-fit .item .ie { font-size: min(clamp(40px, 10vw, 56px), calc(var(--cell) * .42)); }
+.items.qa-fit .item .in { font-size: min(15px, calc(var(--cell) * .14)); line-height: 1.1; }
+.items.qa-fit .item .ip { font-size: min(19px, calc(var(--cell) * .16)); padding: 0 .5em; }
+
+/* coloring pages: every page as a small thumbnail, no scroll list */
+.cp-pages.qa-fit { gap: 6px; padding: 2px; }
+.cp-pages.qa-fit .cp-pg { padding: 2px; display: grid; place-items: center; font-size: min(22px, calc(var(--cell) * .4)); }
+.cp-pages.qa-fit .cp-pg svg { width: 100%; height: 100%; }
+.cp-pages.qa-fit .cp-pg small { font-size: min(12px, calc(var(--cell) * .2)); }
+@media (orientation: landscape) and (max-height: 520px) {
+  .cp-pal { width: clamp(108px, 14vw, 150px); grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .fd-pal { width: clamp(190px, 24vw, 250px); grid-template-columns: repeat(5, 1fr); gap: 5px; overflow: hidden; }
+  .fd-row { gap: 5px; }
+  .cp-clear { font-size: 20px; padding: 2px; }
+}
+
+/* "Welke letter?": the four letters always fit */
+.letters { grid-auto-rows: minmax(0, 1fr); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.letter { font-size: min(clamp(70px, 18vw, 140px), 22vh); }
+@media (orientation: landscape) { .letters { grid-template-columns: repeat(4, minmax(0, 1fr)); } .letter { font-size: min(clamp(70px, 18vw, 140px), 34vh); } }
+
+/* Alina's room: the whole shop on screen */
+.room-shop.qa-fit { gap: 6px; padding: 2px; }
+.room-shop.qa-fit .room-it { padding: 2px 0; justify-content: center; font-size: min(40px, calc(var(--cell) * .5)); }
+.room-shop.qa-fit .room-it small { font-size: min(13px, calc(var(--cell) * .2)); }
+
+/* "Alina zegt": round pads that always fit */
+.pads.qa-fit .pad { border-radius: 50%; }
+
+/* adventure and race maps */
+.adv-map.qa-fit .adv-node { padding: 2px; gap: 2px; }
+.adv-map.qa-fit .adv-node b { font-size: min(clamp(30px, 6vh, 50px), calc(var(--cell) * .3)); }
+.adv-map.qa-fit .adv-node span { font-size: min(clamp(15px, 2.6vh, 21px), calc(var(--cell) * .13)); max-width: 96%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.adv-map.qa-fit .adv-node i { font-size: min(clamp(18px, 3.2vh, 28px), calc(var(--cell) * .15)); }
+
+/* care: four meters next to each other on a narrow phone */
+.meters { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.acts { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (orientation: portrait) {
+  .meter { flex-direction: column; gap: 2px; padding: 6px 2px; border-radius: 22px; }
+  .ring { width: min(clamp(58px, 10.5vh, 82px), 17vw); }
+  .ring .mi { font-size: min(clamp(28px, 5.4vh, 42px), 8vw); }
+  .mood { font-size: min(clamp(26px, 5vh, 38px), 7vw); }
+  .act .al { font-size: min(clamp(16px, 2.6vh, 22px), 4vw); }
+}
+
+/* kitchen toppings in one row of small buttons */
+@media (orientation: portrait) {
+  .pz-tops { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); }
+  .pz-top { font-size: min(clamp(24px, 4.6vh, 40px), 7vw); min-width: 0; }
+  .pz-top small { font-size: min(13px, 2.8vw); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+
+/* kitchen stages: the drawing never pushes the page longer than the screen */
+.pz-wrap { min-height: 0; }
+.pz-stage { overflow: hidden; }
+
+/* piano: all keys on screen */
+.pk.w { min-width: 0; padding-inline: 0; }
+.pk.w span { font-size: min(clamp(12px, 2.2vh, 18px), 3vw); padding: 0 2px; }
+@media (orientation: portrait) { .piano { padding: 10px 6px 12px; gap: 2px; } }
+
+/* menu tiles: the picture stays inside its tile */
+.tile .pic { overflow: hidden; }
+.tile .pic img, .tile .pic svg { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+/* answer buttons: big numbers (level 14: 4-5 digits) shrink instead of pushing the row off screen */
+.answers > .ans { min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 520px) { .answers:not(.les-ans):not(.clk-ans) > .ans { font-size: clamp(20px, 6.4vw, 30px); } }

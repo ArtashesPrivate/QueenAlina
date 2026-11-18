@@ -10,11 +10,21 @@ Een update installeer je op dezelfde manier over de bestaande app heen.
 
 ## Spelen
 
-Het is precies Spelen en Leren met LOU, met de naam Queen Alina. Vul één keer de code **2021** in. Daarna kies je een tabblad en een spel, net als bij LOU. Alles werkt zonder internet, ook LOU's stem.
+De app opent meteen, zonder code. Queen Alina, een lief meisje met bruine krullen en een paarse jurk, is het hoofdpersonage. Ze beweegt: ze ademt, knippert, kijkt rond, haar krullen zwaaien en haar mond beweegt als ze praat. Ook in de spellen met een tekening, zoals springen, avontuur en racen.
+
+Overal waar een naam staat, staat de naam van het kind dat speelt. Is er geen profiel gemaakt, dan heet ze **Alina**.
+
+## Leren per groep
+
+Bij het tabblad **Leren** kies je de groep: 3, 4, 5, 6, 7, 8 of 9 (9 is de brugklas). Je ziet dan de lessen die bij die groep horen, zoals op school: lezen, spelling, begrijpend lezen, werkwoorden, sommen en tafels, klokkijken, geld, breuken, kommagetallen, procenten, meten, Engels en voor de brugklas negatieve getallen, machten, wortels en vergelijkingen. Sommen, klok en geld beginnen op het niveau van de gekozen groep.
 
 ## Moeilijkere levels
 
-Sommen gaan door tot 10.000, de tafels tot 12, de klok tot op de minuut, geld tot 100 euro, memory tot 10 paren en puzzels tot 6×6 stukjes. Je komt er vanzelf door te spelen. Ga naar **⚙️ Voor ouders**, vul 2021 in en tik op **🚀 Moeilijke levels** om ze meteen aan te zetten.
+Sommen gaan door tot 10.000, de tafels tot 12, de klok tot op de minuut, geld tot 100 euro, memory tot 10 paren en puzzels tot 6×6 stukjes. Je komt er vanzelf door te spelen.
+
+## Voor ouders
+
+Alleen **⚙️ Voor ouders** vraagt de code **2021**. Daar kun je alles opnieuw beginnen, de moeilijke levels meteen aanzetten (**🚀 Moeilijke levels**), zien hoe het gaat en de speeltijd-wekker instellen.
 
 ## Bewaren
 

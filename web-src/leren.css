@@ -1,0 +1,18 @@
+/* ===== Queen Alina: groep choice and lessons ===== */
+.groep-row { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; font-family: var(--font-display); font-weight: 800; color: var(--ink-soft); font-size: clamp(14px, 2.4vh, 18px); }
+.groep-row .groep { flex: 1; max-width: 56px; min-width: 32px; aspect-ratio: 1; border-radius: 50%; background: var(--card); box-shadow: var(--shadow); font-family: var(--font-display); font-weight: 800; font-size: clamp(15px, 2.6vh, 20px); color: var(--ink); }
+.groep-row .groep.on { background: var(--berry, #8c5cff); color: #fff; }
+.les-show { flex: 1; min-height: 0; display: grid; place-items: center; background: var(--card); border-radius: 24px; box-shadow: var(--shadow); padding: 8px 12px; overflow: hidden; }
+.les-big { font-family: var(--font-display); font-weight: 800; font-size: clamp(34px, min(14vh, 12vw), 120px); line-height: 1.1; text-align: center; }
+.les-big small { font-size: .45em; color: var(--ink-soft); }
+.les-big u { text-decoration: none; display: inline-block; min-width: 1.2em; border-bottom: .08em solid var(--ink); }
+.les-eq { font-family: var(--font-display); font-weight: 800; font-size: clamp(26px, min(9vh, 9vw), 64px); line-height: 1.1; text-align: center; font-variant-numeric: tabular-nums; }
+.les-pie { height: min(100%, 30vh); width: auto; max-width: 100%; }
+.les-rect { height: min(100%, 28vh); width: auto; max-width: 100%; }
+.les-text { font-size: clamp(14px, min(2.6vh, 4.2vw), 21px); line-height: 1.35; font-weight: 700; text-align: left; max-height: 100%; overflow: hidden; }
+.frac { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; line-height: 1; font-size: .8em; margin: 0 .08em; }
+.frac b { border-bottom: .08em solid currentColor; padding: 0 .12em .04em; }
+.frac i { font-style: normal; padding-top: .04em; }
+.les-ans .ans { font-size: clamp(18px, min(4.4vh, 6vw), 34px); padding: 6px 4px; min-height: 48px; }
+.les-ans.les-long .ans { font-size: clamp(14px, min(2.6vh, 4.2vw), 20px); padding: 8px 12px; text-align: left; }
+.prompt b { white-space: nowrap; }

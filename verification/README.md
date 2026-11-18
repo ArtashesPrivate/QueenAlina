@@ -1,5 +1,19 @@
 # Verification
 
+## 2026-11-18 — Queen Alina als personage, groepen, alles op één scherm
+
+Wat is veranderd: geen code bij het openen (alleen Voor ouders vraagt 2021), Queen Alina als bewegend SVG-personage in plaats van LOU, overal de naam van het kind (standaard Alina), groep 3 t/m 9 bij Leren met eigen lessen, en elk spel op één telefoonscherm.
+
+- `tools/test-rules.ps1`: 26 sterrencontroles, 60.015 levelcontroles, 21.607 lesvragen, `index.html` gelijk aan `web-src/`.
+- `tools/fit-audit.js` op de Android 16-emulator (Pixel 6, 412×915 CSS-pixels): elk tabblad en elk spel geopend, staand en liggend, ook met alle groeiende spellen op level 9 en sommen op level 14, en het tabblad Leren voor groep 3, 6 en 9. Resultaat: niets scrollt, niets valt buiten beeld. Eén fout gevonden en opgelost: bij sommen tot 10.000 duwden vier antwoordknoppen de rij 11 pixels buiten beeld.
+- Gevonden en opgelost: de tekst "Tik om te springen!" op het canvas was breder dan een staand scherm, en canvastekst ("Houd je vinger naast LOU") kreeg de naam niet. Canvastekst krijgt nu de naam en krimpt als hij niet past.
+- Animatie op het canvas: twee schermafbeeldingen van "Emma springt" 0,3 s na elkaar verschillen in hoofdstand, oogrichting en krullen; hoed en bril blijven op hun plek.
+- Naam: op de emulator met profiel "Emma" heten alle tegels "Zorg voor Emma", "Emma springt" enz.; zonder profiel "Zorg voor Alina".
+- Apparaattest na een schone installatie: **23 controles geslaagd** (menu zonder code, Alina in de balk, geen LOU op het scherm, hoofd en ogen geanimeerd, groep 9 toont brugklaslessen, stem, stemfragmenten, lettertype, 37 overgenomen sterren, som op level 14, ster, terug-knop, geld op level 5 past, Voor ouders vraagt de code en 2021 opent het).
+- Opgelost: het laden van de Nederlandse stem gebeurde op de hoofdthread van Android. Dat gebeurt nu op de achtergrond, zodat het spel bij de eerste start niet even vastloopt.
+- Schermen: `alina-menu.png` (Leren met groepkeuze), `alina-springt.png` (Alina in een canvasspel), en van de vorige ronde `alina-leren-groep.png`, `alina-breuken.png`, `alina-begrijpend-lezen.png`, `alina-zorg.png`, `alina-memory-staand.png`, `alina-memory-liggend.png`.
+- Niet getest: een fysieke telefoon of tablet; de uitspraak van de apparaatstem op gehoor.
+
 ## 2026-11-18 — precieze kopie van Spelen met LOU
 
 Op verzoek van de eigenaar (die LOU zelf heeft gemaakt) is LOU's eigen spelcode offline in de app gezet, met de naam Queen Alina en moeilijkere levels. De vorige, zelfgetekende versie is vervangen.

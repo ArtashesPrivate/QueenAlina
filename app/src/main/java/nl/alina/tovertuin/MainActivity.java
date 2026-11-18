@@ -2,6 +2,7 @@ package nl.alina.tovertuin;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.pm.ApplicationInfo;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.Build;
@@ -33,7 +34,7 @@ public class MainActivity extends Activity {
 
     WebView web;
     private TextToSpeech tts;
-    private boolean ttsReady;
+    private volatile boolean ttsReady;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override protected void onCreate(Bundle state) {
@@ -44,12 +45,15 @@ public class MainActivity extends Activity {
         w.setNavigationBarColor(Color.parseColor("#dff1ff"));
 
         tts = new TextToSpeech(this, status -> {
-            if (status == TextToSpeech.SUCCESS) {
+            if (status != TextToSpeech.SUCCESS) return;
+            // Loading the Dutch voice can take seconds; on the main thread that freezes the web view too.
+            new Thread(() -> {
                 int r = tts.setLanguage(new Locale("nl", "NL"));
                 ttsReady = r != TextToSpeech.LANG_MISSING_DATA && r != TextToSpeech.LANG_NOT_SUPPORTED;
-            }
+            }, "tts-language").start();
         });
 
+        if ((getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0) WebView.setWebContentsDebuggingEnabled(true);
         web = new WebView(this);
         web.setBackgroundColor(Color.parseColor("#dff1ff"));
         WebSettings s = web.getSettings();
