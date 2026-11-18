@@ -13,7 +13,7 @@ Een update installeer je op dezelfde manier over de bestaande app heen. Sterren,
 Alina begint met vier vriendjes: Bobby de hond, Mila de kat, Dino en Pluis het konijn.
 
 - **Thuis:** eten geven, borstelen, spelen en slapen.
-- **Leren:** hapjes aantikken en tellen, memory spelen en verstoppertje.
+- **Spelen:** dezelfde soorten spellen als Spelen met LOU: keuken, bouwen, spelletjes, leren, sprookjes en Sinterklaas. De code is 2021. Bij Ouders kun je zwaardere levels aanzetten.
 - **Dieren:** een ander vriendje kiezen of je vriendje een nieuwe naam geven.
 - **Winkel:** met verdiende sterren nieuwe dieren verwelkomen.
 

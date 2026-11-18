@@ -1,5 +1,11 @@
 # Verification
 
+## 2026-11-18 — dezelfde wereld als Spelen met LOU
+
+Alle tabbladen en spellen staan in de app, onder de naam Queen Alina. Code 2021. Levels lopen door tot voorbij de oorspronkelijke ladder (sommen tot 10.000, tafels 11 en 12, tellen tot 50, klok per minuut, geld tot 100). `LevelsTest` 126 controles. Op de emulator: code, hub, plussom en level geslaagd. Scherm: `phone-hub-small.png`.
+
+Avontuur, race en de keuken zijn speelbaar, maar eenvoudiger dan de volledige werelden in LOU. Ze gebruiken eigen tekeningen, niet de plaatjes van LOU.
+
 ## 2026-11-18 — speelbare spellen
 
 Na het bekijken van Spelen met LOU (hapjes aantikken, memory, verstoppertje) zijn de tekstkeuzes vervangen door drie tikspellen: Hapjes tellen, Memory en Verstoppertje. Schermen: `phone-feed-game-small.png`, `phone-memory-small.png`. Op de Android 16-emulator: 190 controles geslaagd, inclusief fout hapje zonder straf, juiste hapjes met automatische volgende opdracht, een memory-paar en een fout struikje.

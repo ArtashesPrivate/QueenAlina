@@ -17,24 +17,17 @@ Stabiele downloadlink voor de nieuwste geslaagde build:
 
 ## Spelen
 
-Alina begint met Bobby de hond, Mila de kat, Dino en Pluis het konijn. Kies **Leren**, kies een spel en beantwoord vijf opdrachten voor vijf sterren.
-
-- Na een **goed** antwoord reageert het spel vrolijk en gaat de volgende opdracht vanzelf verder. Er is geen knop "Volgende opdracht".
-- Na een **fout** antwoord krijg je concrete hulp en mag je opnieuw kiezen. Je verliest geen sterren en het spel gaat niet vanzelf verder.
-- Iedere som wordt voorgelezen, precies zoals hij op het scherm staat (bijvoorbeeld "Drie plus twee. Hoeveel is dat samen?"). De uitkomst wordt niet voorgelezen. Met de knop **Luister naar de opdracht** hoor je de opdracht opnieuw.
-- Reacties wisselen af, bijvoorbeeld "Jaaa, dat klopt!", "Hoera! Goed gerekend!" of "Wauw, dat heb je slim gedaan!". Er zijn aparte reacties voor een afgerond rondje.
-
-In **Winkel** kun je met sterren nieuwe dieren verwelkomen: hamster (20), egel (30), schildpad (40), pony (60), eenhoorn (80) en vos (100). Een aankoop vraagt bevestiging en wordt nooit dubbel afgeschreven. Kies een vriendje onder **Dieren**. Verzorging onder **Thuis** kost geen sterren.
+Open de app en vul **2021** in. Daarna kies je een tabblad en een spel. Een goed antwoord levert een ster op en telt mee voor het level. Drie fouten en het level begint opnieuw, zonder dat je sterren kwijtraakt. Sterren gebruik je om Alina aan te kleden en haar kamer in te richten.
 
 ## Leren
 
-De leerspellen zijn echt te spelen, niet alleen een tekstkeuze:
+De indeling volgt Spelen met LOU, met de naam **Queen Alina**. De code om te beginnen is **2021**.
 
-- **Hapjes tellen:** je vriendje vraagt om een aantal hapjes. Je tikt ze zelf aan tussen andere dingen. Een fout hapje telt niet.
-- **Memory:** draai kaartjes om en zoek twee dezelfde.
-- **Verstoppertje:** zoek het struikje waar een oortje uitsteekt.
+Tabbladen: Alina, Keuken, Bouwen, Spelletjes, Leren, Sprookjes en Sinterklaas. Daarin zitten dezelfde soorten spellen: zorgen, voeren, nazeggen, verstoppertje, puzzel, aankleden, album, kamer, feest, bed, pizza, boterham, koekjes, taart, smoothie, ijs, toren, vormen, vrij bouwen, muur, memory, tellen, kleuren, ballonnen, springen, avontuur, race, muziek, piano, kleurplaat, tekenen, plus, min, keer, delen, letters, klok, geld, sprookjes en Sinterklaas.
 
-Ouders kunnen tellen tot 10 of tot 20 zetten. De hapjes op het scherm blijven een klein aantal, zodat alles in één blik past.
+Elk spel heeft levels en drie hartjes. Vijf goede antwoorden (drie bij een actiespel) is een level omhoog. Een level blijft bewaard. Bij **Ouders** (opnieuw code 2021) kun je de zware levels aanzetten of alles terugzetten naar level 1.
+
+De zware levels gaan verder dan de gewone ladder: plussommen en minsommen tot 10.000 en met vier getallen, tafels van 11 en 12, tellen tot 50, de klok tot op de minuut, betalen tot 100 euro, en memory met tien paren.
 
 ## Stem
 
@@ -85,7 +78,7 @@ De sleutel is de Android-debugsleutel waarmee de eerdere 0.1.0-installatie is ge
 
 ## Beperkingen (eerlijk)
 
-- Personages bewegen nog met getekende frames en eenvoudige effecten, **geen** gearticuleerd skelet of 3D-rig.
-- Hoofdschermen passen op een telefoon van 1080×2400 niet overal volledig zonder scrollen; dat is nog open werk.
-- Alle dieren gebruiken één Android-stem; er zijn nog geen aparte stemopnamen per dier.
-- Getest op een Android 16-emulator (Google Play-image), niet op een fysieke telefoon of tablet.
+- Avontuur, race en de keuken zijn speelbaar, maar eenvoudiger dan de volledige werelden en tekenstappen van Spelen met LOU. De tekeningen zijn van ons, niet de plaatjes van LOU.
+- Het menu scrolt, omdat er veel spellen op staan. Een spel zelf past op één scherm.
+- Er is één Nederlandse Android-stem, geen aparte stem per dier.
+- Getest op een Android 16-emulator, niet op een fysieke telefoon.
