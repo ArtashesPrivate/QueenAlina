@@ -1,4 +1,4 @@
-# Alina’s Tovertuin
+# Queen Alina: Leer & Speel
 
 ## Platform
 android

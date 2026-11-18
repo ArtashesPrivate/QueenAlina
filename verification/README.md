@@ -1,11 +1,41 @@
-# Verification — 2026-11-16
+# Verification
 
-- Android APK and native test APK build successfully with AGP 8.13.0 / Gradle 8.14.3 / JDK 21 / compile SDK 36.
-- Android lint: no errors. Remaining warnings concern Dutch-only inline interface strings.
-- Pure Java rules: 26 checks passed (reward bounds, duplicate claims/purchases, ownership, progression, care bounds).
-- Native Android activity tests: **37 checks passed** on an Android 16 emulator. They exercised four actual learning rounds, wrong-answer retries, exact star rewards, the native purchase confirmation, buying the hamster, feeding, sleeping, the word and pattern screens, and reopening the activity with saved progress.
-- APK signature verified using APK Signature Scheme v2; minimum Android API 26.
+## 2026-11-18 — Queen Alina: Leer & Speel (versie 0.2.x)
 
-The Windows-hosted Android emulator repeatedly displayed system-app ANR dialogs during early accessibility/screenshot automation. These were emulator System UI / Pixel Launcher / Digital Wellbeing failures, not application exceptions. The native activity runner bypassed the blocked accessibility bridge and completed all 37 app checks. After stopping the stalled emulator background apps, the home, learning menu and shop were captured and visually checked. Dutch speech playback, animation smoothness, and physical-device touch testing are not yet signed off. Dutch speech depends on an installed offline Dutch voice.
+Ondertekening en update-pad
 
-`native-tests.txt` contains the successful native runner output. `tools/smoke-device.py` is the full touch/accessibility test for a stable emulator or physical test device. Run that script on a clean dedicated profile without previously bought animals; it earns the first hamster through four rounds and intentionally changes that test profile.
+- De oude installatie 0.1.0 (`Alinas-Tovertuin-0.1.0.apk`) is ondertekend met de Android-debugsleutel, SHA-256 `bc885dda…`. Die sleutel is nu als GitHub-secret opgeslagen en wordt gebruikt voor elke build.
+- Test: 0.1.0 geïnstalleerd, voortgang in de app gezet (37 sterren, aangepaste naam, twee dieren), daarna de nieuwe release-APK met `adb install -r` eroverheen. Resultaat: installatie geslaagd, applicationId gelijk, versionCode 42 > 1, voortgang behouden (`phone-update-from-0.1.0.png`: "Queen Alina", ★ 37, Mila actief).
+- Niet getest: een echte telefoon en de downloadlink via `/releases/latest` vanaf een telefoon (vereist GitHub-aanmelding).
+
+Automatische controles (lokaal en in CI-opzet)
+
+- `tools/GameRulesTest.java`: 26 controles (economie, aankopen, verzorging, voortgang).
+- `tools/LessonTextTest.java`: 2255 controles (Nederlandse zinnen voor optellen en aftrekken, uitkomst niet voorgelezen, reacties zonder herhaling achter elkaar, lengte en unieke zinnen).
+- `assembleRelease`, `assembleDebugAndroidTest`, `lintDebug`: geslaagd.
+- Native instrumentatietest op Android 16-emulator (Google Play-image): **95 controles geslaagd**. Dekt: vijf sommen per rondje met automatische overgang na een goed antwoord, foutantwoord zonder straf en zonder overgang, voorgelezen zin gelijk aan de zichtbare zin, vijf sterren per rondje, aankoop met bevestiging, verzorging, woord- en patroonspel, herstart met behoud van voortgang.
+
+Schermen
+
+- `phone-learn-menu.png` en `phone-math-question.png` (emulator, 1080×2400). Het spelscherm toont de som, de zin die voorgelezen wordt, en de keuzes. Het luisterblok en de feedback vallen op deze hoogte onder de vouw: schermen zonder scroll zijn **nog niet** afgerond.
+
+Niet getest
+
+- Nederlandse stemuitspraak is niet beoordeeld op gehoor en er is geen audio-controle uitgevoerd. De tests controleren de zinnen die worden voorgelezen en de tijdsvangnetten, niet de klank.
+- Gearticuleerde animatie: nog niet gewijzigd.
+- Fysieke telefoons en tablets.
+
+## Eerdere verificatie — 2026-11-16 (Alina’s Tovertuin 0.1.0)
+
+Historische schermafbeeldingen `phone-home-verified.png`, `phone-learning-verified.png` en `phone-shop-verified.png` tonen de oude naam.
+
+- Android APK en native testAPK gebouwd met AGP 8.13.0 / Gradle 8.14.3 / JDK 21 / compile SDK 36.
+- Android lint: geen fouten.
+- Pure Java-regels: 26 controles geslaagd.
+- Native Android-activiteit: 37 controles geslaagd op een Android 16-emulator (`native-tests.txt`).
+
+`tools/smoke-device.py` is de volledige touch/accessibility-test voor een stabiele emulator of fysiek testtoestel.
+
+## Iconen
+
+- `icon-preview.png`: het icoon in groot, middel en klein formaat. Gemaakt door `tools/make-icon.py` uit het goedgekeurde spritesheet.

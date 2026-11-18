@@ -1,17 +1,44 @@
 plugins { id 'com.android.application' }
 // Optional local build directory avoids sync-client file locks in OneDrive workspaces.
 if (project.hasProperty('alinaBuildDir')) layout.buildDirectory = file(project.property('alinaBuildDir'))
+
+// CI passes ALINA_VERSION_CODE (monotonic run number) and ALINA_VERSION_NAME.
+// Local builds keep the defaults below.
+def releaseVersionCode = (System.getenv('ALINA_VERSION_CODE') ?: '2').toInteger()
+def releaseVersionName = System.getenv('ALINA_VERSION_NAME') ?: '0.2.0'
+
+// Same signing key as the installed 0.1.0 build (Android debug key, SHA-256 bc885dda…).
+// Keeping it lets an update install over the existing app and keep its progress.
+// CI supplies the key from GitHub secrets; without them, the release build falls back to the local debug key.
+def keystoreFile = System.getenv('ALINA_KEYSTORE_FILE')
+
 android {
     namespace 'nl.alina.tovertuin'
     compileSdk 36
     defaultConfig {
+        // applicationId must stay the same, otherwise Android treats the update as a new app and progress is lost.
         applicationId 'nl.alina.tovertuin'
         minSdk 26
         targetSdk 36
-        versionCode 1
-        versionName '0.1.0'
+        versionCode releaseVersionCode
+        versionName releaseVersionName
         testInstrumentationRunner 'nl.alina.tovertuin.SmokeInstrumentation'
     }
+    signingConfigs {
+        if (keystoreFile) {
+            release {
+                storeFile file(keystoreFile)
+                storePassword System.getenv('ALINA_KEYSTORE_PASSWORD')
+                keyAlias System.getenv('ALINA_KEY_ALIAS')
+                keyPassword System.getenv('ALINA_KEY_PASSWORD')
+            }
+        }
+    }
     compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
-    buildTypes { release { minifyEnabled false } }
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig keystoreFile ? signingConfigs.release : signingConfigs.debug
+        }
+    }
 }

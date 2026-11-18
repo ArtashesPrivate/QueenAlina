@@ -1,30 +1,47 @@
-# Alina’s Tovertuin — native Android first playable
+# Queen Alina: Leer & Speel
 
-Publisher account: **KingApps.com**. Proposed store name: **Queen Alina: Leer & Speel** (see `BRANDING.md`). Source repository: https://github.com/ArtashesPrivate/QueenAlina.
+Uitgever: **KingApps.com**. Bron: https://github.com/ArtashesPrivate/QueenAlina (privé repository).
 
-An actual native Android app written in Java using Android Views and Canvas. No WebView, website, JavaScript runtime, remote game server, account, or network permission.
+Een echte Android-app in Java met Android Views en Canvas. Geen WebView, website, JavaScript-runtime of externe spelserver, geen account en geen netwerkrechten.
 
-## Install and play
+## Downloaden en installeren
 
-Open `Alinas-Tovertuin-0.1.0.apk` on an Android phone or tablet running Android 8.0 or newer. Allow installation from the app that opened the file when Android asks. This is a locally signed debug build for personal testing, not a Play Store release. Keep the original signing key if you want future updates to retain this installation's progress.
+Stabiele downloadlink voor de nieuwste geslaagde build:
 
-Alina starts with Bobby the dog, Mila the cat, Dino, and Pluis the rabbit. Tap **Leren**, choose an activity, and complete five questions to earn five stars. Incorrect answers can be retried. In **Winkel**, use stars to welcome a hamster (20), hedgehog (30), turtle (40), pony (60), unicorn (80), or fox (100). Purchases ask for confirmation and cannot charge twice for an owned animal. Choose a friend under **Dieren**, then feed, brush, play, or rest under **Thuis**. Care costs no stars. Progress is automatically saved on the device.
+**https://github.com/ArtashesPrivate/QueenAlina/releases/latest/download/Queen-Alina.apk**
 
-## Learning and speech
+- Omdat de repository privé is, vraagt GitHub om aanmelding met een account dat toegang heeft. Zonder aanmelding is de link niet bereikbaar.
+- Tik op de link op een Android-telefoon of -tablet (Android 8.0 of nieuwer), en open het gedownloade bestand.
+- Android vraagt om toestemming om apps uit deze bron te installeren. Dat is een beveiligingsstap van Android, geen automatische installatie.
+- Updates installeer je over de bestaande app heen. Sterren, dieren, namen en voortgang blijven behouden, omdat elke build met dezelfde sleutel wordt ondertekend.
 
-- **Rekenbakkerij:** addition and subtraction within 10; parents can switch to 20.
-- **Dierenwoorden:** match whole written Dutch animal names to images. This is introductory vocabulary/reading practice, not a complete reading curriculum or phoneme tutor.
-- **Toverketting:** complete alternating shape-and-colour patterns.
-- Dutch interface regardless of the phone's language. Spoken prompts and scripted pet dialogue use an installed **offline Dutch Android text-to-speech voice**. There is no microphone or free-form conversation. Install Dutch voice data under the phone's text-to-speech settings if unavailable, then reopen the game. The parent screen links to these settings. Text and gameplay remain available without a voice.
-- Native pose animation: all characters have neutral, walking, talking, and sleeping frames. Feeding adds movement and a bowl; grooming adds a brush. These are simple frame animations, not fully rigged 3D models.
+## Spelen
 
-**Ouders** on the home screen uses a simple arithmetic gate. It provides sound, maths difficulty, and progress information. The gate is a child-friendly separation, not a security mechanism. The world displays a level that rises with learning rounds; full avatar growth, clothing, decorative purchases, advanced school content, and richer animation packs are future extensions.
+Alina begint met Bobby de hond, Mila de kat, Dino en Pluis het konijn. Kies **Leren**, kies een spel en beantwoord vijf opdrachten voor vijf sterren.
 
-## Build
+- Na een **goed** antwoord reageert het spel vrolijk en gaat de volgende opdracht vanzelf verder. Er is geen knop "Volgende opdracht".
+- Na een **fout** antwoord krijg je concrete hulp en mag je opnieuw kiezen. Je verliest geen sterren en het spel gaat niet vanzelf verder.
+- Iedere som wordt voorgelezen, precies zoals hij op het scherm staat (bijvoorbeeld "Drie plus twee. Hoeveel is dat samen?"). De uitkomst wordt niet voorgelezen. Met de knop **Luister naar de opdracht** hoor je de opdracht opnieuw.
+- Reacties wisselen af, bijvoorbeeld "Jaaa, dat klopt!", "Hoera! Goed gerekend!" of "Wauw, dat heb je slim gedaan!". Er zijn aparte reacties voor een afgerond rondje.
 
-Open this directory in Android Studio. Use its bundled JDK (17 or newer), install Android SDK platform 36, and let Android Studio create `local.properties` with your SDK location.
+In **Winkel** kun je met sterren nieuwe dieren verwelkomen: hamster (20), egel (30), schildpad (40), pony (60), eenhoorn (80) en vos (100). Een aankoop vraagt bevestiging en wordt nooit dubbel afgeschreven. Kies een vriendje onder **Dieren**. Verzorging onder **Thuis** kost geen sterren.
 
-Windows:
+## Leren
+
+- **Rekenbakkerij:** optellen en aftrekken tot 10; ouders kunnen op 20 zetten.
+- **Dierenwoorden:** kies het juiste woord bij een dier. Dit is introductie-woordenschat, geen volledig leesprogramma.
+- **Toverketting:** patronen met afwisselende vormen afmaken.
+
+## Stem
+
+- Voorlezen gebruikt een **offline Nederlandse tekst-naar-spraak-stem op het apparaat**. Installeer die via Android-instellingen voor tekst-naar-spraak; het spel heeft een knop daarvoor bij **Ouders**.
+- Zonder stem blijven alle teksten en spelletjes werken; de opdracht staat dan alleen geschreven.
+- Er is geen microfoon en geen vrij gesprek met een AI.
+- Stemmen per dier zijn nog **niet** aparte opnamen; alle dieren gebruiken dezelfde Android-stem. Dat staat als open punt in de overdracht.
+
+## Bouwen
+
+Open de map in Android Studio (JDK 17 of nieuwer, Android SDK platform 36).
 
 ```powershell
 $env:JAVA_HOME = 'C:\Program Files\Android\Android Studio\jbr'
@@ -32,28 +49,39 @@ $env:JAVA_HOME = 'C:\Program Files\Android\Android Studio\jbr'
 .\tools\test-rules.ps1
 ```
 
-APK output: `app/build/outputs/apk/debug/app-debug.apk`.
+Lokale builds gebruiken de standaard debug-sleutel. De release-build in CI gebruikt de vaste sleutel uit GitHub-secrets.
 
-Build dependencies: Android Gradle Plugin 8.13.0 and Gradle 8.14.3. No application libraries or third-party SDKs. A first build on another machine downloads the build tools; gameplay itself needs no internet.
+## Automatische releases (GitHub Actions)
 
-## Project structure
+`.github/workflows/android.yml` doet bij elke push en pull request:
 
-- `MainActivity.java`: native screens, learning rounds, speech, and navigation.
-- `CharacterView.java`: frame-based character rendering and care effects.
-- `GameRules.java`: pure economy/progression/care rules.
-- `GameStore.java`: versioned local progress storage.
-- `assets/friends.png`, `assets/extras.png`, `assets/extra-actions.png`: AI-generated game sprite atlases based on the approved designs.
-- `assets/sprite-bounds.json`: precomputed frame rectangles, keeping pixel analysis off the Android UI thread. If atlases change, regenerate with `python tools/analyse-sprites.py` (requires Pillow).
-- `art/approved-animation-sheet.png`: the approved visual reference.
-- `tools/GameRulesTest.java`: regression checks for rewards, purchase bounds, duplicate claims, pet selection, and care limits.
-- `verification/`: build/test evidence and device screenshots when available.
+1. Speltesten en Nederlandse teksttests (`tools/GameRulesTest.java`, `tools/LessonTextTest.java`).
+2. Bouwen van de ondertekende release-APK, compileren van de apparaattests en Android lint.
+3. Controle dat de APK met de vaste sleutel is ondertekend (`bc885dda…`) en dat de `versionCode` hoger is dan eerder.
 
-Progress is local. Uninstalling or clearing Android app data removes it. No destructive reset control is exposed to Alina.
+Alleen na een **geslaagde** build op `main` wordt `Queen-Alina.apk` bijgewerkt in de release **android-latest**, die als "latest" gemarkeerd is. Versienummer: `0.2.<run-nummer>`, `versionCode` = `100 + run-nummer`.
 
-## GitHub builds and publishing
+Vereiste secrets (nooit in de code):
 
-`.github/workflows/android.yml` builds the APK, compiles native device tests, runs Android lint and the game-rule checks for pushes and pull requests. Download `Alinas-Tovertuin-Android` from the Actions run. Pushing a version tag such as `v0.1.0` creates a private GitHub prerelease with the APK after a successful build. This distributes an Android test build; it does not deploy a website or publish to Google Play.
+- `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`
 
-Before long-term update distribution, configure a stable dedicated signing key. Default debug keys on fresh GitHub runners can differ between builds; Android will reject an update signed by another key. Never commit signing keys or passwords. A production Play release additionally needs its final application ID, upload signing key, signed AAB, store listing and Play Console setup.
+De sleutel is de Android-debugsleutel waarmee de eerdere 0.1.0-installatie is gemaakt. Die is nodig zodat updates over de bestaande app heen werken. Voor een Play Store-release is een eigen uploadsleutel nodig; die moet dan apart worden beheerd.
 
-To use a build directory outside a cloud-synced folder: `./gradlew -PalinaBuildDir=/absolute/local/path :app:assembleDebug`.
+## Projectstructuur
+
+- `MainActivity.java`: schermen, leerrondjes, voorlezen en navigatie.
+- `LessonText.java`: Nederlandse zinnen voor sommen en de reacties (zonder Android-afhankelijkheid, dus testbaar).
+- `CharacterView.java`: frame-gebaseerd personage en verzorgingseffecten.
+- `GameRules.java`: pure regels voor sterren, aankopen, voortgang en verzorging.
+- `GameStore.java`: lokale voortgang met versie.
+- `res/mipmap-anydpi-v26/`: adaptive launcher-icoon met Alina (afgeleid van het goedgekeurde personage).
+- `assets/friends.png`, `extras.png`, `extra-actions.png`: sprite-atlassen van het goedgekeurde ontwerp.
+- `art/queen-alina-icon-512.png`: winkel- en presentatie-icoon. Gemaakt met `tools/make-icon.py`.
+- `verification/`: bewijs van builds, tests en schermen op een emulator.
+
+## Beperkingen (eerlijk)
+
+- Personages bewegen nog met getekende frames en eenvoudige effecten, **geen** gearticuleerd skelet of 3D-rig.
+- Hoofdschermen passen op een telefoon van 1080×2400 niet overal volledig zonder scrollen; dat is nog open werk.
+- Alle dieren gebruiken één Android-stem; er zijn nog geen aparte stemopnamen per dier.
+- Getest op een Android 16-emulator (Google Play-image), niet op een fysieke telefoon of tablet.

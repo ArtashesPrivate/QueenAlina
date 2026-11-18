@@ -1,13 +1,19 @@
 # Naamvoorstel voor KingApps.com
 
-## Voorkeur
+## Gekozen naam
 
 **Queen Alina: Leer & Speel**
 
-Queen sluit aan bij KingApps.com en de repository QueenAlina. Alina blijft het middelpunt; Leer & Speel maakt voor Nederlandse ouders het doel duidelijk. De app en alle gesproken opdrachten blijven Nederlands.
+Uitgever: **KingApps.com**. De naam is in de app, de launcher (`app:label` in `strings.xml`), de documentatie en de releasepagina doorgevoerd. De oude naam “Alina’s Tovertuin” is vervangen.
 
-Voorgestelde korte omschrijving:
+Korte omschrijving:
 
 > Leer, speel en verzorg je dierenvriendjes. Verdien sterren voor nieuwe dieren!
 
-Naam is een voorstel; de eerste APK heet nog Alina’s Tovertuin. Winkelnaam, definitief applicationId en productieondertekening moeten vaststaan vóór de eerste Play Store-publicatie. De huidige applicationId is nl.alina.tovertuin. Na publicatie kan een applicationId niet worden veranderd voor dezelfde winkelvermelding.
+## Technische identiteit
+
+- Bestandsnaam van de APK: **Queen-Alina.apk** (vast, zodat de downloadlink altijd naar de nieuwste build wijst).
+- `applicationId`: `nl.alina.tovertuin`. Deze blijft ongewijzigd, zodat updates de bestaande installatie vervangen en de voortgang behouden. Een nieuwe applicationId zou een andere app zijn.
+- Appicoon: Alina’s hoofd uit het goedgekeurde Knuffelwereld-personage, op een zachte perzik-achtergrond (`#FBEBE0`). Geen tekst. Adaptive icon met veilige marge; winkelbeeld in `art/queen-alina-icon-512.png`.
+
+Een definitieve Play Store-publicatie vraagt om een eigen uploadsleutel en een definitieve applicationId vóór de eerste publicatie.
