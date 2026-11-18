@@ -3,9 +3,8 @@
 ## Installeren
 
 1. Open op je Android-telefoon of -tablet deze link: **https://github.com/ArtashesPrivate/QueenAlina/releases/latest/download/Queen-Alina.apk**
-2. Meld je aan bij GitHub met een account dat toegang heeft tot de privé-repository.
-3. Open het gedownloade bestand **Queen-Alina.apk** en geef, als Android daarom vraagt, toestemming om deze app te installeren.
-4. Open **Queen Alina: Leer & Speel**. Android 8.0 of nieuwer is nodig.
+2. Open het gedownloade bestand **Queen-Alina.apk** en geef, als Android daarom vraagt, toestemming om deze app te installeren.
+3. Open **Queen Alina: Leer & Speel**. Android 8.0 of nieuwer is nodig.
 
 Een update installeer je op dezelfde manier over de bestaande app heen. Sterren, dieren, namen en voortgang blijven dan behouden.
 

@@ -6,7 +6,8 @@ Ondertekening en update-pad
 
 - De oude installatie 0.1.0 (`Alinas-Tovertuin-0.1.0.apk`) is ondertekend met de Android-debugsleutel, SHA-256 `bc885dda…`. Die sleutel is nu als GitHub-secret opgeslagen en wordt gebruikt voor elke build.
 - Test: 0.1.0 geïnstalleerd, voortgang in de app gezet (37 sterren, aangepaste naam, twee dieren), daarna de nieuwe release-APK met `adb install -r` eroverheen. Resultaat: installatie geslaagd, applicationId gelijk, versionCode 42 > 1, voortgang behouden (`phone-update-from-0.1.0.png`: "Queen Alina", ★ 37, Mila actief).
-- Niet getest: een echte telefoon en de downloadlink via `/releases/latest` vanaf een telefoon (vereist GitHub-aanmelding).
+- Downloadlink `/releases/latest/download/Queen-Alina.apk`: anoniem bereikbaar (HTTP 200, `application/vnd.android.package-archive`, 6,9 MB). De repository staat sinds 16 nov 2026 op openbaar; de eigenaar heeft dat zo gehouden.
+- Niet getest: een echte telefoon, en het installeren vanaf de link op een telefoon.
 
 Automatische controles (lokaal en in CI-opzet)
 

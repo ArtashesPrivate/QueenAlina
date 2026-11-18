@@ -1,6 +1,6 @@
 # Queen Alina: Leer & Speel
 
-Uitgever: **KingApps.com**. Bron: https://github.com/ArtashesPrivate/QueenAlina (privé repository).
+Uitgever: **KingApps.com**. Bron: https://github.com/ArtashesPrivate/QueenAlina (openbaar; de eigenaar heeft dit zo gekozen).
 
 Een echte Android-app in Java met Android Views en Canvas. Geen WebView, website, JavaScript-runtime of externe spelserver, geen account en geen netwerkrechten.
 
@@ -10,7 +10,7 @@ Stabiele downloadlink voor de nieuwste geslaagde build:
 
 **https://github.com/ArtashesPrivate/QueenAlina/releases/latest/download/Queen-Alina.apk**
 
-- Omdat de repository privé is, vraagt GitHub om aanmelding met een account dat toegang heeft. Zonder aanmelding is de link niet bereikbaar.
+- Geen GitHub-aanmelding nodig: de repository is openbaar, dus de link werkt ook zonder account.
 - Tik op de link op een Android-telefoon of -tablet (Android 8.0 of nieuwer), en open het gedownloade bestand.
 - Android vraagt om toestemming om apps uit deze bron te installeren. Dat is een beveiligingsstap van Android, geen automatische installatie.
 - Updates installeer je over de bestaande app heen. Sterren, dieren, namen en voortgang blijven behouden, omdat elke build met dezelfde sleutel wordt ondertekend.

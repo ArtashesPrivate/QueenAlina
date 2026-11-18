@@ -100,7 +100,7 @@ jobs:
         run: |
           APK="release/$APK_NAME"
           test -s "$APK"
-          NOTES="Queen Alina: Leer & Speel. Build $GITHUB_RUN_NUMBER (commit ${GITHUB_SHA:0:7}). Download $APK_NAME op een Android-telefoon of -tablet. Dit is een privé-repository: meld je aan bij GitHub met een account met toegang. Android vraagt om toestemming om apps van deze bron te installeren."
+          NOTES="Queen Alina: Leer & Speel. Build $GITHUB_RUN_NUMBER (commit ${GITHUB_SHA:0:7}). Tik op de APK-link op een Android-telefoon of -tablet en open $APK_NAME. Android vraagt om toestemming om apps van deze bron te installeren; updates installeer je over de bestaande app heen."
           git tag -f "$RELEASE_TAG" "$GITHUB_SHA"
           git push -f origin "refs/tags/$RELEASE_TAG"
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
