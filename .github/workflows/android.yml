@@ -49,13 +49,12 @@ jobs:
           if [ -z "$KEYSTORE_B64" ]; then echo "::error::Secret ANDROID_KEYSTORE_BASE64 is missing"; exit 1; fi
           echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/alina-release.keystore"
           echo "ALINA_KEYSTORE_FILE=$RUNNER_TEMP/alina-release.keystore" >> "$GITHUB_ENV"
-      - name: Test Dutch speech and game rules
+      - name: Test levels and saved stars
         run: |
           mkdir -p build/rule-tests
-          javac --release 17 -encoding UTF-8 -d build/rule-tests app/src/main/java/nl/alina/tovertuin/GameRules.java app/src/main/java/nl/alina/tovertuin/LessonText.java app/src/main/java/nl/alina/tovertuin/Levels.java tools/GameRulesTest.java tools/LessonTextTest.java tools/LevelsTest.java
+          javac --release 17 -encoding UTF-8 -d build/rule-tests app/src/main/java/nl/alina/tovertuin/GameRules.java tools/GameRulesTest.java
           java -cp build/rule-tests nl.alina.tovertuin.GameRulesTest
-          java -cp build/rule-tests nl.alina.tovertuin.LessonTextTest
-          java -cp build/rule-tests nl.alina.tovertuin.LevelsTest
+          node tools/check-levels.js
       - name: Build, compile device tests and lint
         env:
           ALINA_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}

@@ -2,65 +2,100 @@ package nl.alina.tovertuin;
 
 import android.app.Activity;
 import android.app.Instrumentation;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import org.json.JSONArray;
 
-/** Opens the same world as Spelen met LOU and checks a real sum, a level and a playable board. */
+/** Runs the offline game in the real WebView: code, menu, voice clips, old stars and a level-14 sum. Expects a fresh install. */
 public final class SmokeInstrumentation extends Instrumentation {
-    private Activity activity;
+    private MainActivity activity;
     private int passed;
+
     @Override public void onCreate(Bundle args) { super.onCreate(args); start(); }
-    private void check(boolean ok, String msg) { if (!ok) throw new AssertionError(msg); passed++; Bundle b = new Bundle(); b.putString("stream", "PASS: " + msg + "\n"); sendStatus(0, b); }
-    private ArrayList<TextView> labels() { ArrayList<TextView> list = new ArrayList<>(); collect(activity.findViewById(android.R.id.content), list); return list; }
-    private void collect(View v, ArrayList<TextView> out) {
-        if (v instanceof TextView) out.add((TextView) v);
-        if (v instanceof ViewGroup) for (int i = 0; i < ((ViewGroup) v).getChildCount(); i++) collect(((ViewGroup) v).getChildAt(i), out);
+
+    private void check(boolean ok, String msg) {
+        if (!ok) throw new AssertionError(msg);
+        passed++;
+        Bundle b = new Bundle(); b.putString("stream", "PASS: " + msg + "\n"); sendStatus(0, b);
     }
-    private boolean hasStarting(String prefix) { for (TextView v : labels()) if (v.getText().toString().startsWith(prefix)) return true; return false; }
-    private void clickStarting(String prefix) {
-        for (TextView v : labels()) if (v instanceof Button && v.getText().toString().startsWith(prefix)) { v.performClick(); return; }
-        throw new AssertionError("Missing button " + prefix);
+
+    private String js(String code) throws Exception {
+        final String[] out = {null};
+        CountDownLatch done = new CountDownLatch(1);
+        runOnMainSync(() -> activity.web.evaluateJavascript("(function(){try{return String(" + code + ");}catch(e){return 'ERR '+e;}})()", v -> { out[0] = v; done.countDown(); }));
+        if (!done.await(10, TimeUnit.SECONDS)) throw new AssertionError("No answer from the page for " + code);
+        return out[0] == null || out[0].equals("null") ? "" : new JSONArray("[" + out[0] + "]").getString(0);
     }
-    private void onMain(Runnable action) {
-        final Throwable[] failure = {null};
-        super.runOnMainSync(() -> { try { action.run(); } catch (Throwable t) { failure[0] = t; } });
-        if (failure[0] != null) throw new AssertionError("Native UI check failed", failure[0]);
+
+    private String waitFor(String code, String expected, long ms) throws Exception {
+        long end = SystemClock.uptimeMillis() + ms;
+        String v = "";
+        while (SystemClock.uptimeMillis() < end) {
+            v = js(code);
+            if (expected == null ? !v.isEmpty() && !v.equals("false") : v.equals(expected)) return v;
+            SystemClock.sleep(250);
+        }
+        throw new AssertionError("Waited for " + code + " = " + expected + ", got " + v);
     }
+
     @Override public void onStart() {
         Bundle result = new Bundle();
         try {
-            activity = startActivitySync(new Intent(getTargetContext(), MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            onMain(() -> {
-                if (hasStarting("wis") || hasStarting("2")) {
-                    if (hasStarting("2")) clickStarting("2");
-                    clickStarting("0"); clickStarting("2"); clickStarting("1");
-                }
-            });
-            SystemClock.sleep(400);
-            onMain(() -> {
-                check(hasStarting("Queen Alina"), "Hub opens as Queen Alina");
-                clickStarting("Leren");
-            });
-            SystemClock.sleep(200);
-            onMain(() -> { check(hasStarting("Plussommen"), "Learn tab lists the sum game"); clickStarting("Plussommen"); });
-            SystemClock.sleep(300);
-            onMain(() -> {
-                MainActivity host = (MainActivity) activity;
-                check(host.arcade != null, "A sum game is on screen");
-                check(host.arcade.expected != null && !host.arcade.expected.isEmpty(), "The sum has one right answer");
-                check(hasStarting("level 1") || hasStarting("Plussommen"), "Level is shown");
-                String answer = host.arcade.expected;
-                clickStarting(answer);
-            });
-            SystemClock.sleep(200);
-            onMain(() -> check(((MainActivity) activity).arcade.done() >= 1, "A correct sum is accepted"));
-            result.putString("stream", "PASS: " + passed + " native checks. Code, hub, sum and level passed.\n");
+            Context target = getTargetContext();
+            GameRules old = new GameRules(); old.stars = 37;
+            new GameStore(target).save(old);
+            activity = (MainActivity) startActivitySync(new Intent(target, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
+            waitFor("!!document.querySelector('.key')", "true", 20000);
+            check(js("document.title").equals("Queen Alina"), "Page title is Queen Alina");
+            check(js("document.querySelector('.lock h1').textContent").contains("Queen Alina"), "Code screen shows Queen Alina");
+            js("['2','0','2','1'].forEach(function(k){document.querySelector('.key[data-k=\"'+k+'\"]').click();})");
+            waitFor("!!document.querySelector('.tile')", "true", 8000);
+            check(js("document.querySelector('.bar h1').textContent").contains("Queen Alina"), "Code 2021 opens the menu of Queen Alina");
+            check(js("document.querySelectorAll('.tab').length").equals("7"), "All seven tabs are there");
+            check(js("localStorage.getItem('speeltuin-stars')").equals("37"), "Stars from the earlier app carried over");
+
+            check(js("typeof speechSynthesis.speak==='function' && !!window.QAHost").equals("true"), "Device voice is connected to Android");
+            js("fetch('voice/voice.json').then(function(r){return r.json();}).then(function(j){window.__qaVoice=Object.keys(j).length;})");
+            check(Integer.parseInt(waitFor("window.__qaVoice||''", null, 8000)) > 1000, "LOU's recorded voice lines load offline");
+            js("fetch('voice/voice.json').then(function(r){return r.json();}).then(function(j){return fetch('voice/'+j[Object.keys(j)[0]]);})"
+                + ".then(function(r){return r.arrayBuffer();}).then(function(a){return new Promise(function(ok,no){new AudioContext().decodeAudioData(a,ok,no);});})"
+                + ".then(function(b){window.__qaClip=b.duration>0.1?'yes':'short';},function(e){window.__qaClip='no '+e;})");
+            check(waitFor("window.__qaClip||''", null, 8000).equals("yes"), "A recorded voice line decodes to sound");
+            js("document.fonts.ready.then(function(){window.__qaFont=document.fonts.check('800 20px \"Baloo 2\"');})");
+            check(waitFor("window.__qaFont===undefined?'':window.__qaFont", null, 8000).equals("true"), "Baloo 2 font loads offline");
+
+            js("localStorage.setItem('speeltuin-lv-sum-+','14')");
+            js("document.querySelector('.tab[data-t=\"leer\"]').click()");
+            waitFor("[].some.call(document.querySelectorAll('.tile .name'),function(n){return n.textContent==='Plussommen';})", "true", 4000);
+            js("[].filter.call(document.querySelectorAll('.tile'),function(t){return t.querySelector('.name').textContent==='Plussommen';})[0].click()");
+            waitFor("!!document.querySelector('.sum-kind')", "true", 4000);
+            check(js("document.querySelector('.sum-kind').textContent").equals("Tot 5000"), "Harder level 14: sums to 5000");
+            int a = Integer.parseInt(js("document.querySelector('.eq').textContent.match(/\\d+/g)[0]"));
+            int b = Integer.parseInt(js("document.querySelector('.eq').textContent.match(/\\d+/g)[1]"));
+            check(a >= 1000 && a + b <= 5000, "The sum is between 1000 and 5000: " + a + " + " + b);
+            check(js("!!document.querySelector('.ans[data-n=\"" + (a + b) + "\"]')").equals("true"), "The right answer is one of the buttons");
+            js("document.querySelector('.ans[data-n=\"" + (a + b) + "\"]').click()");
+            waitFor("document.querySelectorAll('#lvProg i.on').length", "1", 3000);
+            check(js("localStorage.getItem('speeltuin-stars')").equals("38"), "A right answer gives a star");
+
+            runOnMainSync(() -> activity.goBack());
+            waitFor("!!document.querySelector('.tile')", "true", 4000);
+            check(true, "Android back returns to the menu");
+
+            js("localStorage.setItem('speeltuin-lv-money','5')");
+            js("[].filter.call(document.querySelectorAll('.tile'),function(t){return t.querySelector('.name').textContent==='Geld tellen';})[0].click()");
+            waitFor("document.querySelectorAll('.mo-btn').length", "6", 4000);
+            int price = Integer.parseInt(js("document.querySelector('.mo-tag').textContent.replace(/\\D/g,'')"));
+            check(price >= 20 && price <= 100, "Harder money level 5: price " + price + " euro");
+            check(js("[].every.call(document.querySelectorAll('.mo-btn'),function(b){var r=b.getBoundingClientRect();return r.bottom<=innerHeight+1&&r.right<=innerWidth+1&&r.width>30;})").equals("true"),
+                "All six coins and notes fit on the screen");
+
+            result.putString("stream", "PASS: " + passed + " checks in the offline game.\n");
             finish(Activity.RESULT_OK, result);
         } catch (Throwable t) {
             result.putString("stream", "FAIL: " + android.util.Log.getStackTraceString(t));

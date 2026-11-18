@@ -1,6 +1,14 @@
 # Verification
 
-## 2026-11-18 — dezelfde wereld als Spelen met LOU
+## 2026-11-18 — precieze kopie van Spelen met LOU
+
+Op verzoek van de eigenaar (die LOU zelf heeft gemaakt) is LOU's eigen spelcode offline in de app gezet, met de naam Queen Alina en moeilijkere levels. De vorige, zelfgetekende versie is vervangen.
+
+- `tools/check-levels.js`: 60.015 controles op de gebundelde code (sommen op elk level kloppen, levels 14–16 en 9–10, getallen boven 1000 uitspreken, klok op elke minuut).
+- Apparaattest op de Android 16-emulator, na een schone installatie: 16 controles geslaagd. Titel en codescherm Queen Alina, code 2021 opent het menu, 7 tabbladen, 37 sterren uit de vorige versie overgenomen, Android-stem gekoppeld, LOU's stemfragmenten laden en worden tot geluid gedecodeerd, lettertype Baloo 2 laadt offline, plussom op level 14 tussen 1000 en 5000, goed antwoord geeft een ster, Android-terug gaat naar het menu, geld op level 5 (prijs 20–100 euro) met zes munten en briefjes die op het scherm passen.
+- Scherm: `web-menu-small.png` (tab Leren, liggend).
+
+## 2026-11-18 — dezelfde wereld als Spelen met LOU (vervangen)
 
 Alle tabbladen en spellen staan in de app, onder de naam Queen Alina. Code 2021. Levels lopen door tot voorbij de oorspronkelijke ladder (sommen tot 10.000, tafels 11 en 12, tellen tot 50, klok per minuut, geld tot 100). `LevelsTest` 126 controles. Op de emulator: code, hub, plussom en level geslaagd. Scherm: `phone-hub-small.png`.
 

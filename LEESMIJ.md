@@ -6,23 +6,16 @@
 2. Open het gedownloade bestand **Queen-Alina.apk** en geef, als Android daarom vraagt, toestemming om deze app te installeren.
 3. Open **Queen Alina: Leer & Speel**. Android 8.0 of nieuwer is nodig.
 
-Een update installeer je op dezelfde manier over de bestaande app heen. Sterren, dieren, namen en voortgang blijven dan behouden.
+Een update installeer je op dezelfde manier over de bestaande app heen.
 
 ## Spelen
 
-Alina begint met vier vriendjes: Bobby de hond, Mila de kat, Dino en Pluis het konijn.
+Het is precies Spelen en Leren met LOU, met de naam Queen Alina. Vul één keer de code **2021** in. Daarna kies je een tabblad en een spel, net als bij LOU. Alles werkt zonder internet, ook LOU's stem.
 
-- **Thuis:** eten geven, borstelen, spelen en slapen.
-- **Spelen:** dezelfde soorten spellen als Spelen met LOU: keuken, bouwen, spelletjes, leren, sprookjes en Sinterklaas. De code is 2021. Bij Ouders kun je zwaardere levels aanzetten.
-- **Dieren:** een ander vriendje kiezen of je vriendje een nieuwe naam geven.
-- **Winkel:** met verdiende sterren nieuwe dieren verwelkomen.
+## Moeilijkere levels
 
-Een leerrondje bestaat uit vijf opdrachten. Daarna krijg je vijf sterren. Na een goed antwoord gaat het spel vanzelf door. Een fout antwoord kost niets; je mag opnieuw kiezen. Alle verzorging is gratis. De dieren worden niet ziek als je een tijdje niet speelt.
-
-## Nederlandse stem
-
-Voor de voorgelezen opdrachten moet op het apparaat een **offline Nederlandse tekst-naar-spraakstem** staan. Ga op het beginscherm naar **Ouders**, los de som op en kies **Steminstellingen openen**. Installeer zo nodig Nederlandse spraakgegevens en open de app opnieuw. De spelletjes en geschreven opdrachten werken ook zonder stem.
+Sommen gaan door tot 10.000, de tafels tot 12, de klok tot op de minuut, geld tot 100 euro, memory tot 10 paren en puzzels tot 6×6 stukjes. Je komt er vanzelf door te spelen. Ga naar **⚙️ Voor ouders**, vul 2021 in en tik op **🚀 Moeilijke levels** om ze meteen aan te zetten.
 
 ## Bewaren
 
-Sterren, gekochte dieren, namen en verzorging worden op dit apparaat opgeslagen. Er zijn geen advertenties, accounts of aankopen met echt geld. Verwijder je de app of wis je de appgegevens in Android, dan verdwijnt ook de voortgang.
+Sterren, kleren, levels en bouwwerken worden op dit apparaat bewaard. Er zijn geen advertenties, accounts of aankopen met echt geld. Verwijder je de app of wis je de appgegevens in Android, dan verdwijnt ook de voortgang.
